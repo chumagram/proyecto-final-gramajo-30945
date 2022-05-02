@@ -1,0 +1,36 @@
+[
+  {
+    "id": 1,
+    "listaP": [
+      {
+        "brand": "BMW",
+        "model": "E36 Serie 3",
+        "price": 13200,
+        "year": 1995,
+        "traction": "RWD",
+        "power": 291,
+        "maximum torque": 323,
+        "thumbnail": "https://www.ultimatespecs.com/cargallery/11/6310/w400_BMW-E36-3-Series-Coupe-c29942-7.jpg",
+        "id": 1,
+        "quantity": 6,
+        "cantidad": null
+      },
+      {
+        "brand": "TOYOTA",
+        "model": "Corolla AE86 Levin",
+        "price": 9800,
+        "year": 1987,
+        "traction": "RWD",
+        "power": 129,
+        "maximum torque": 149,
+        "thumbnail": "https://bhauction.com/data/img/lots/1987-TOYOTA-COROLLA-LEVIN-AE86-GT-APEX/_lot_d_thumb/MASP2761.jpg",
+        "id": 2,
+        "quantity": 2
+      },
+      {
+        "error": "producto no encontrado",
+        "quantity": 1
+      }
+    ]
+  }
+]

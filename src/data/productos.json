@@ -1,0 +1,30 @@
+[
+    {
+      "name": "Sable laser",
+      "price":120,
+      "thumbnail": "https://as.com/meristation/imagenes/2021/05/05/betech/1620209195_059699_1620209343_sumario_grande.jpg",
+      "stock": 109,
+      "id": 1
+    },
+    {
+      "name": "Peluche de Grogu",
+      "price":80,
+      "thumbnail": "https://m.media-amazon.com/images/I/81-ustlVcwL._AC_SX569_.jpg",
+      "stock": 40,
+      "id": 2
+    },
+    {
+      "name": "Casco de Darth Vader",
+      "price":50,
+      "thumbnail": "https://m.media-amazon.com/images/I/71TSNMmfWuL._AC_SL1321_.jpg",
+      "stock": 786,
+      "id": 3
+    },
+    {
+      "name": "X-wing",
+      "price":234,
+      "thumbnail": "https://m.media-amazon.com/images/I/610wKANTT5L._AC_SL1500_.jpg",
+      "stock": 324,
+      "id": 4
+    }
+]

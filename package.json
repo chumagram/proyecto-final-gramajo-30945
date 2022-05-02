@@ -1,0 +1,23 @@
+{
+  "name": "proyecto-final-gramajo-30945",
+  "version": "1.0.0",
+  "description": "proyecto final del alumno gonzalo leonel gramajo para el curso de coder house\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D backend de coder house",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chumagram/proyecto-final-gramajo-30945.git"
+  },
+  "author": "Gonzalo Leonel Gramajo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chumagram/proyecto-final-gramajo-30945/issues"
+  },
+  "homepage": "https://github.com/chumagram/proyecto-final-gramajo-30945#readme",
+  "dependencies": {
+    "express": "^4.18.1"
+  }
+}

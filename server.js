@@ -1,8 +1,13 @@
 const express = require('express');
 const productRoutes = require('./src/routes/productRoutes.js');
 const cartRoutes = require('./src/routes/cartRoutes.js');
+const fs = require('fs');
+const path = require('path');
 const app = express();
 const PORT = 8080;
+
+let directorioJson = path.join(__dirname,'/src/data/usuarios.json');
+let admin = JSON.parse(fs.readFileSync(directorioJson, 'utf-8'));
 
 // Levantar el servidor:
 const server = app.listen(PORT,()=>{
@@ -27,17 +32,19 @@ app.get('/',(require,response)=>{
 app.get('/login',(require,response)=>{
     let login = require.body;
     if(login.password == 123123123 && login.user == "chuma"){
-        admin = true;
-        response.json({Hecho:"Sesión iniciada", Admin: admin});
+        admin.adminState = true;
+        fs.writeFileSync(directorioJson, JSON.stringify(admin,null,2));
+        response.json({Hecho:"Sesión iniciada", Admin: admin.adminState});
     } else if (login.password == 123123123){
         response.json({Error:"Usuario incorrecto"});
     } else if (login.user == "chuma"){
-        response.json({Hecho:"Usted es un usuario", Admin: admin});
+        response.json({Hecho:"Usted es un usuario", Admin: admin.adminState});
     }
 })
 
 // Fin de sesion como administrador
 app.get('/logout',(require,response)=>{
-    admin = false;
+    admin.adminState = false;
+    fs.writeFileSync(directorioJson, JSON.stringify(admin,null,2));
     response.json({Hecho:"Sesión terminada"});
 })

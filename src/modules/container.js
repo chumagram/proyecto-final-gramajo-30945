@@ -97,6 +97,7 @@ class Contenedor {
         try {
             fs.writeFileSync(this.workFile, JSON.stringify(arrayVacio));
             console.log('Todos los objetos en',this.workFile,'fueron borrados');
+            return { hecho : `¡La lista fue eliminada completamente!`}
         } catch (error) {
             console.log('Error: no se pudo borrar los datos');
         }

@@ -3,33 +3,55 @@
     "id": 1,
     "listaP": [
       {
-        "brand": "BMW",
-        "model": "E36 Serie 3",
-        "price": 13200,
-        "year": 1995,
-        "traction": "RWD",
-        "power": 291,
-        "maximum torque": 323,
-        "thumbnail": "https://www.ultimatespecs.com/cargallery/11/6310/w400_BMW-E36-3-Series-Coupe-c29942-7.jpg",
+        "name": "Peluche de Grogu",
+        "price": 80,
+        "description": "La cosa mas tierna que veras en tu vida y de toda la galaxia basicamente.",
+        "thumbnail": "https://m.media-amazon.com/images/I/81-ustlVcwL._AC_SX569_.jpg",
+        "code": 568734765698,
         "id": 1,
-        "quantity": 6,
-        "cantidad": null
-      },
+        "timeStamp": "4/5/2022 - 16:02:42",
+        "quantity": 26
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "timeStamp": "4/4/2022 - 17:16:42",
+    "listaP": [
       {
-        "brand": "TOYOTA",
-        "model": "Corolla AE86 Levin",
-        "price": 9800,
-        "year": 1987,
-        "traction": "RWD",
-        "power": 129,
-        "maximum torque": 149,
-        "thumbnail": "https://bhauction.com/data/img/lots/1987-TOYOTA-COROLLA-LEVIN-AE86-GT-APEX/_lot_d_thumb/MASP2761.jpg",
-        "id": 2,
-        "quantity": 2
-      },
-      {
-        "error": "producto no encontrado",
+        "name": "Peluche de Grogu",
+        "price": 80,
+        "description": "La cosa mas tierna que veras en tu vida y de toda la galaxia basicamente.",
+        "thumbnail": "https://m.media-amazon.com/images/I/81-ustlVcwL._AC_SX569_.jpg",
+        "code": 568734765698,
+        "id": 1,
+        "timeStamp": "4/5/2022 - 16:02:42",
         "quantity": 1
+      },
+      {
+        "name": "X-wing",
+        "price": 234,
+        "description": "La nave mas fachera que existe, es analogo a tener un Buggati, pero interestelar, sisi, interestelar, porque tiene un hiperpropulsor re fachero.",
+        "thumbnail": "https://m.media-amazon.com/images/I/610wKANTT5L._AC_SL1500_.jpg",
+        "code": 458756983487,
+        "id": 2,
+        "timeStamp": "4/5/2022 - 16:02:42",
+        "quantity": 2
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "timeStamp": "4/5/2022 - 18:30:06",
+    "listaP": [
+      {
+        "name": "Peluche de Grogu",
+        "price": 80,
+        "description": "La cosa mas tierna que veras en tu vida y de toda la galaxia basicamente.",
+        "thumbnail": "https://m.media-amazon.com/images/I/81-ustlVcwL._AC_SX569_.jpg",
+        "code": 568734765698,
+        "id": 1,
+        "quantity": 6
       }
     ]
   }

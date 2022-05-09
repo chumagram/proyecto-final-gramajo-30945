@@ -6,7 +6,7 @@ const {Router} = express;
 const productRoute = Router();
 
 let directorioJson = path.join(__dirname,"../data/usuarios.json");
-let admin = JSON.parse(fs.readFileSync(directorioJson, 'utf-8'));
+let admin;
 
 // DEVOLVER TODOS LOS PRODUCTOS
 productRoute.get('/',(require,response)=>{
@@ -24,18 +24,20 @@ productRoute.get('/:id',(require,response)=>{
 
 // AGREGAR UN NUEVO PRODUCTO (ADMIN)
 productRoute.post('/',(require,response)=>{
+    admin = JSON.parse(fs.readFileSync(directorioJson, 'utf-8'));
     if (admin.adminState){
         let agregar = require.body;
         console.log('Producto a agregar:\n',agregar);
         let newId = productos.saveProduct(agregar);
         response.send(`Id del producto agregado:${newId}`);
     } else {
-        response.send(`Admin:${admin.adminState}->Usted no es un administrador`);
+        response.send(`Admin:${admin.adminState} -> Usted no es un administrador`);
     }
 })
 
 //ACTUALIZAR UN PRODUCTO SEGUN SU ID (ADMIN)
 productRoute.put('/:id',(require,response)=>{
+    admin = JSON.parse(fs.readFileSync(directorioJson, 'utf-8'));
     if (admin.adminState){
         let id = parseInt(require.params.id);
         let actualizar = require.body;
@@ -43,28 +45,30 @@ productRoute.put('/:id',(require,response)=>{
         console.log('Objeto actualizado:\n',newObject);
         response.json({'Objeto actualizado': newObject});
     } else {
-        response.send(`Admin:${admin.adminState}->Usted no es un administrador`);
+        response.send(`Admin:${admin.adminState} -> Usted no es un administrador`);
     }
 })
 
 // ELIMINAR UN PRODUCTO SEGUN SU ID (ADMIN)
 productRoute.delete('/:id',(require,response)=>{
+    admin = JSON.parse(fs.readFileSync(directorioJson, 'utf-8'));
     if(admin.adminState){
         let id = parseInt(require.params.id);
         let str = productos.deleteById(id);
         response.json(str);
     } else {
-        response.send(`Admin:${admin.adminState}->Usted no es un administrador`);
+        response.send(`Admin:${admin.adminState} -> Usted no es un administrador`);
     }
 })
 
 // ELIMINAR TODA LA LISTA DE PRODUCTOS (ADMIN)
 productRoute.delete('/',(require,response)=>{
+    admin = JSON.parse(fs.readFileSync(directorioJson, 'utf-8'));
     if (admin.adminState){
         let str = productos.deleteAll();
         response.json(str);
     } else {
-        response.send(`Admin: ${admin.adminState} -> Usted no es un administrador`);
+        response.send(`Admin:${admin.adminState} -> Usted no es un administrador`);
     }
 })
 

@@ -7,26 +7,26 @@
     "stock": 40,
     "code": 568734765698,
     "id": 1,
-    "timeStamp": "4/5/2022 - 16:02:42"
+    "timeStamp": "9/5/2022 - 14:29:50"
   },
   {
     "name": "X-wing",
     "price": 234,
     "description": "La nave mas fachera que existe, es analogo a tener un Buggati, pero interestelar, sisi, interestelar, porque tiene un hiperpropulsor re fachero.",
     "thumbnail": "https://m.media-amazon.com/images/I/610wKANTT5L._AC_SL1500_.jpg",
-    "stock": 324,
+    "stock": 100,
     "code": 458756983487,
     "id": 2,
-    "timeStamp": "4/5/2022 - 16:02:42"
+    "timeStamp": "9/5/2022 - 15:32:07"
   },
   {
     "name": "Sable laser",
     "price": 120,
     "description": "Tremendo sable laser re fachero, original que lo uso darth vader para exterminar jedis en la orden 66.",
     "thumbnail": "https://as.com/meristation/imagenes/2021/05/05/betech/1620209195_059699_1620209343_sumario_grande.jpg",
-    "stock": 10,
+    "stock": 150,
     "code": 123456987234,
     "id": 3,
-    "timeStamp": "4/5/2022 - 19:36:19"
+    "timeStamp": "9/5/2022 - 15:18:34"
   }
 ]

@@ -11,7 +11,6 @@ class Contenedor {
     JSONcheck(){
         try {
             fs.readFileSync(this.workFile,'utf-8');
-            console.log(this.workFile,'encontrado!');
         } catch (error) {
             fs.writeFileSync(this.workFile,'[]');
             console.log(this.workFile,'creado con exito!');
@@ -26,8 +25,6 @@ class Contenedor {
         if(this.lastID === -Infinity){
             this.lastID = 0;
             console.log(this.workFile,' está vacío.');
-        } else {
-            console.log(`ID mayor del archivo ingresado: ${this.lastID}`);
         }
     }
 

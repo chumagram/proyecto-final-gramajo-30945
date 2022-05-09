@@ -23,11 +23,6 @@ app.use(express.urlencoded({extended:true}));
 app.use('/api/producto', productRoutes);
 app.use('/api/carrito', cartRoutes);
 
-// Llamada a la ruta raíz
-app.get('/',(require,response)=>{
-    response.sendFile(__dirname + '/public/index.html');
-})
-
 // Endpoint del inicio de sesion (solo para admin)
 app.get('/login',(require,response)=>{
     let login = require.body;
@@ -48,3 +43,23 @@ app.get('/logout',(require,response)=>{
     fs.writeFileSync(directorioJson, JSON.stringify(admin,null,2));
     response.json({Hecho:"Sesión terminada"});
 })
+
+// ERROR 404 - Page Not Found
+function error404 (require, response){
+    let ruta = require.path;
+    let metodo = require.method;
+    let notFound = 404;
+    response.status(notFound).send({ERROR: notFound, description: `la ruta ${ruta} con método ${metodo} no tiene ninguna función implementada`});
+}
+app.get('*', function(require, response){
+    error404(require, response);
+});
+app.post('*', function(require, response){
+    error404(require, response);
+});
+app.put('*', function(require, response){
+    error404(require, response);
+});
+app.delete('*', function(require, response){
+    error404(require, response);
+});

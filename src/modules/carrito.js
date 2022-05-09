@@ -14,16 +14,17 @@ class Carrito extends Contenedor {
     }
 
     createCart(){
-        let cartList;
+        let cartList, cartToAdd;
+        
         try {
             cartList = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
+            this.lastID ++;
+            cartToAdd = {id: this.lastID, timeStamp: timeStamp()};
+            cartList.push(cartToAdd);
         } catch(error) {
             console.log('Error: no se encontró carritos.json');
             return {Error: "no se encontró carritos.json"};
         }
-        
-        let cartToAdd = {id: this.lastID, timeStamp: timeStamp()};
-        cartList.push(cartToAdd);
 
         try {
             fs.writeFileSync(this.workFile, JSON.stringify(cartList, null, 2));
@@ -37,8 +38,14 @@ class Carrito extends Contenedor {
 
     addToCart(idProducto,idCart){
         let productToAdd = product.getById(idProducto);
-        let cartList = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-        let auxList = [];
+        let cartList, flagCarrito = true, auxList = [];
+
+        try {
+            cartList = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
+        } catch(error) {
+            return { Error:`No se encontro el archivo`}
+        }
+
         cartList.forEach( carrito => {
             if(carrito.id == idCart){
                 if (carrito.listaP) auxList = carrito.listaP;
@@ -60,15 +67,18 @@ class Carrito extends Contenedor {
                     carrito.timeStamp = timeStamp();
                 }
                 carrito = Object.assign(carrito, { listaP: auxList });
+                flagCarrito = false;
             }
         });
         if (productToAdd.error){
             return productToAdd.error
+        }else if (flagCarrito){
+            return {Error:`Carrito ${idCart} no encontrado`}
         } else {
             try {
                 fs.writeFileSync(this.workFile, JSON.stringify(cartList, null, 2));
                 console.log(`Exito: producto añadido al carrito`);
-                return { Hecho: `Producto añadido al carrito ${idCart}: ${productToAdd}`}
+                return { Hecho: `Producto añadido al carrito ${idCart} exitosamente`}
             } catch(error) {
                 console.log('Error: no se pudo añadir al carrito');
                 return { Error:`Falla al añadir el producto al carrito`}
@@ -81,7 +91,7 @@ class Carrito extends Contenedor {
         if (cartAux.listaP){
             return cartAux.listaP
         } else if (cartAux.error){
-            return cartAux.error
+            return {Error: "carrito no encontrado"}
         }
     }
 

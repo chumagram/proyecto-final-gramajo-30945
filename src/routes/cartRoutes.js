@@ -4,22 +4,12 @@ const express = require('express');
 const {Router} = express;
 const cartRoute = Router();
 
-// MUESTRA LOS PRODUCTOS EN UN CARRITO ESPECÍFICO
-cartRoute.get('/:id/productos',(require,response)=>{
-    let productList = carrito.showAllFromCart(parseInt(require.params.id));
-    response.json(productList);
-})
-
-// AÑADE UN NUEVO PRODUCTO AL CARRITO Y SI EL ID DEL CARRITO NO ES PASADO EN EL BODY, CREA UN NUEVO CARRITO AUTOMÁTICAMENTE:
+// CREAR UN NUEVO CARRITO CON SU PRIMER PRODUCTO:
 cartRoute.post('/',(require,response)=>{
     let data = require.body;
     let productoAdded;
-    if (data.idCart) {
-        productoAdded = carrito.addToCart(data.idProductToAdd, data.idCart);
-    } else {
-        let newCartId = carrito.createCart();
-        productoAdded = carrito.addToCart(data.idProductToAdd, newCartId);
-    }
+    let newCartId = carrito.createCart();
+    productoAdded = carrito.addToCart(data.idProductToAdd, newCartId);
     response.json({productoAdded});
 })
 
@@ -29,6 +19,12 @@ cartRoute.post('/:id/productos/:id_prod',(require,response)=>{
     let idCart = require.params.id;
     productoAdded = carrito.addToCart(idProduct, idCart);
     response.json({productoAdded});
+})
+
+// MUESTRA LOS PRODUCTOS EN UN CARRITO ESPECÍFICO
+cartRoute.get('/:id/productos',(require,response)=>{
+    let productList = carrito.showAllFromCart(parseInt(require.params.id));
+    response.json(productList);
 })
 
 // ELIMINAR UN CARRITO ENTERO:

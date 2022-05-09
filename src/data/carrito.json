@@ -10,13 +10,13 @@
         "code": 568734765698,
         "id": 1,
         "timeStamp": "4/5/2022 - 16:02:42",
-        "quantity": 26
+        "quantity": 24
       }
     ]
   },
   {
     "id": 2,
-    "timeStamp": "4/4/2022 - 17:16:42",
+    "timeStamp": "9/5/2022 - 16:38:21",
     "listaP": [
       {
         "name": "Peluche de Grogu",
@@ -26,7 +26,7 @@
         "code": 568734765698,
         "id": 1,
         "timeStamp": "4/5/2022 - 16:02:42",
-        "quantity": 1
+        "quantity": 3
       },
       {
         "name": "X-wing",
@@ -42,7 +42,7 @@
   },
   {
     "id": 3,
-    "timeStamp": "4/5/2022 - 18:30:06",
+    "timeStamp": "9/5/2022 - 17:52:38",
     "listaP": [
       {
         "name": "Peluche de Grogu",
@@ -51,8 +51,36 @@
         "thumbnail": "https://m.media-amazon.com/images/I/81-ustlVcwL._AC_SX569_.jpg",
         "code": 568734765698,
         "id": 1,
-        "quantity": 6
+        "quantity": 19
+      },
+      {
+        "name": "X-wing",
+        "price": 234,
+        "description": "La nave mas fachera que existe, es analogo a tener un Buggati, pero interestelar, sisi, interestelar, porque tiene un hiperpropulsor re fachero.",
+        "thumbnail": "https://m.media-amazon.com/images/I/610wKANTT5L._AC_SL1500_.jpg",
+        "code": 458756983487,
+        "id": 2,
+        "quantity": 4
       }
     ]
+  },
+  {
+    "id": 4,
+    "timeStamp": "9/5/2022 - 17:09:35",
+    "listaP": [
+      {
+        "name": "Peluche de Grogu",
+        "price": 80,
+        "description": "La cosa mas tierna que veras en tu vida y de toda la galaxia basicamente.",
+        "thumbnail": "https://m.media-amazon.com/images/I/81-ustlVcwL._AC_SX569_.jpg",
+        "code": 568734765698,
+        "id": 1,
+        "quantity": 1
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "timeStamp": "9/5/2022 - 17:52:42"
   }
 ]

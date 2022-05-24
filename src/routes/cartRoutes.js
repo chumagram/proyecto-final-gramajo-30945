@@ -1,5 +1,5 @@
-const carrito = require('../modules/carrito.js');
-const producto = require('../modules/productos.js');
+const carrito = require('../daos/carritos/CarritosDaoArchivo.js');
+//const producto = require('../modules/productos.js');
 const express = require('express');
 const {Router} = express;
 const cartRoute = Router();

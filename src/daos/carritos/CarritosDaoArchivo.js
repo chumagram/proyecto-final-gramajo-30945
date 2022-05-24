@@ -1,6 +1,6 @@
 const path = require('path');
-const Contenedor = require('./container.js');
-const product = require('./productos.js');
+const Contenedor = require('../../contenedores/ContenedorArchivo.js');
+const product = require('../productos/ProductosDaoArchivo.js');
 const fs = require('fs');
 
 function timeStamp(){
@@ -14,25 +14,16 @@ class Carrito extends Contenedor {
     }
 
     createCart(){
-        let cartList, cartToAdd;
-        
-        try {
-            cartList = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-            this.lastID ++;
-            cartToAdd = {id: this.lastID, timeStamp: timeStamp()};
-            cartList.push(cartToAdd);
-        } catch(error) {
-            console.log('Error: no se encontró carritos.json');
-            return {Error: "no se encontró carritos.json"};
-        }
-
-        try {
-            fs.writeFileSync(this.workFile, JSON.stringify(cartList, null, 2));
-            console.log(`Exito: carrito añadido a carrito.json`);
-            return cartToAdd.id;
-        } catch(error) {
-            console.log('Error: no se pudo añadir el carrito');
-            return {Error: 'Error: no se pudo añadir el carrito'};
+        let cartToAdd = {};
+        let createCarrito = this.createDocument(cartToAdd);
+        const okReturn = `carrito con id ${createCarrito} creado con éxito`;
+        const errReturn = `ERROR al crear el carrito: ${createCarrito}`;
+        if (typeof(createCarrito) == 'number') {
+            console.log(okReturn);
+            return okReturn;
+        } else{
+            console.log(errReturn);
+            return errReturn;
         }
     }
 
@@ -163,13 +154,13 @@ class Carrito extends Contenedor {
     }
 }
 
-let changuito = new Carrito(path.join(__dirname,"../data/carrito.json"));
+let changuito = new Carrito(path.join(__dirname,"../../data/carrito.json"));
 
 // PRUEBA DE MODULO QUE AÑADE PRODUCTOS A UN CARRITO
 //console.log(carrito.addToCart(90,1));
 
 // PRUEBA DE MODULO QUE CREA UN CARRITO NUEVO
-//carrito.createCart();
+//changuito.createCart();
 
 // PRUEBA DE MODULO QUE ELIMINA UN PRODUCTO DE UN CARRITO
 //carrito.deleteFromCart(1,1);

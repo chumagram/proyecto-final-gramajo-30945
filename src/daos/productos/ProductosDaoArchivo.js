@@ -1,5 +1,5 @@
 const path = require('path');
-const Contenedor = require('./container.js');
+const Contenedor = require('../../contenedores/ContenedorArchivo.js');
 const fs = require('fs');
 
 function timeStamp(){
@@ -60,7 +60,7 @@ class Productos extends Contenedor {
     }
 }
 
-let product = new Productos(path.join(__dirname,"../data/productos.json"));
+let product = new Productos(path.join(__dirname,"../../data/productos.json"));
 
 let productoAux = {
     name: "Sable laser",

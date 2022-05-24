@@ -1,4 +1,4 @@
-const productos = require('../modules/productos.js');
+const productos = require('../daos/productos/ProductosDaoArchivo.js');
 const express = require('express');
 const fs = require('fs');
 const path = require('path');

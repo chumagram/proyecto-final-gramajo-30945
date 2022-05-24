@@ -1,5 +1,10 @@
 const fs = require('fs');
 
+function timeStamp(){
+    const date = new Date();
+    return date.toLocaleDateString() + " - " + date.toLocaleTimeString()
+}
+
 class Contenedor {
 
     constructor(dir){
@@ -27,22 +32,29 @@ class Contenedor {
             console.log(this.workFile,' está vacío.');
         }
     }
-
-    save(object){
-        let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-        this.lastID ++
-        object.id = this.lastID;
-        array.push(object);
+    
+    //CREATE
+    createDocument(object){
+        let array;
+        try {
+            array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
+            this.lastID ++;
+            object.id = this.lastID;
+            object.timeStamp = timeStamp();
+            array.push(object);
+        } catch (error) {
+            return error;
+        }
+        
         try {
             fs.writeFileSync(this.workFile, JSON.stringify(array, null, 2));
-            console.log(`Exito: añadido a ${this.workFile}`);
+            return object.id;
         } catch(error) {
-            console.log('Error: no se pudo guardar el objeto');
+            return error;
         }
-        console.log(`ID asignado: ${object.id}`);
-        return object.id;
     }
 
+    //READ ONE
     getById(number){
         let objectAux;
         let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
@@ -60,6 +72,7 @@ class Contenedor {
         }
     }
 
+    //READ ALL
     getAll(){
         let todo, flag;
         try {
@@ -75,31 +88,7 @@ class Contenedor {
         }
     }
 
-    deleteById(number){
-        let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-        let idObject = array.findIndex(object => object.id === number);
-        if (idObject === -1){
-            console.log(`El indice ${number} no existe`);
-            return { error : 'producto no encontrado' }
-        } else {
-            array.splice(idObject, 1);
-            fs.writeFileSync(this.workFile, JSON.stringify(array, null, 2));
-            console.log(`El objeto con ID ${number} fue eliminado exitosamente.`);
-            return { hecho : `El objeto con ID ${number} fue eliminado exitosamente.` }
-        }
-    }
-
-    deleteAll(){
-        const arrayVacio = [];
-        try {
-            fs.writeFileSync(this.workFile, JSON.stringify(arrayVacio));
-            console.log('Todos los objetos en',this.workFile,'fueron borrados');
-            return { hecho : `¡La lista fue eliminada completamente!`}
-        } catch (error) {
-            console.log('Error: no se pudo borrar los datos');
-        }
-    }
-
+    //UPDATE
     updateById(numero, objeto){
         let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
         let indexObj = array.findIndex(element => element.id === numero);
@@ -114,6 +103,34 @@ class Contenedor {
             return objeto;
         }
     }
+
+    //DELETE ONE
+    deleteById(number){
+        let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
+        let idObject = array.findIndex(object => object.id === number);
+        if (idObject === -1){
+            console.log(`El indice ${number} no existe`);
+            return { error : 'producto no encontrado' }
+        } else {
+            array.splice(idObject, 1);
+            fs.writeFileSync(this.workFile, JSON.stringify(array, null, 2));
+            console.log(`El objeto con ID ${number} fue eliminado exitosamente.`);
+            return { hecho : `El objeto con ID ${number} fue eliminado exitosamente.` }
+        }
+    }
+
+    //DELETE ALL
+    deleteAll(){
+        const arrayVacio = [];
+        try {
+            fs.writeFileSync(this.workFile, JSON.stringify(arrayVacio));
+            console.log('Todos los objetos en',this.workFile,'fueron borrados');
+            return { hecho : `¡La lista fue eliminada completamente!`}
+        } catch (error) {
+            console.log('Error: no se pudo borrar los datos');
+        }
+    }
+
 }
 
 //let container = new Contenedor('../data/container.json');

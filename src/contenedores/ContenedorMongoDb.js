@@ -1,164 +1,163 @@
-const fs = require('fs');
+const mongoose = require('mongoose');
+//const model = require('../models/containerModel.js');
+//const URL = 'mongodb+srv://chumagram:test1234@cluster0.ar5vn.mongodb.net/container?retryWrites=true&w=majority';
 
-function timeStamp(){
-    const date = new Date();
-    return date.toLocaleDateString() + " - " + date.toLocaleTimeString()
-}
+class ContenedorMongo {
 
-class Contenedor {
-
-    constructor(dir){
-        this.workFile = dir;
-        this.JSONcheck();
+    //CONSTRUCTOR
+    constructor(model,url){
+        this.model = model;
+        this.url = url;
         this.lastID;
     }
-
-    JSONcheck(){
-        try {
-            fs.readFileSync(this.workFile,'utf-8');
-        } catch (error) {
-            fs.writeFileSync(this.workFile,'[]');
-            console.log(this.workFile,'creado con exito!');
-        }
-
-        let array = JSON.parse(fs.readFileSync(this.workFile,'utf-8'));
-        let idAux = [];
-        array.forEach(element => {
-            idAux.push(element.id);
-        });
-        this.lastID = Math.max(...idAux);
-        if(this.lastID === -Infinity){
-            this.lastID = 0;
-            console.log(this.workFile,' está vacío.');
-        }
-    }
     
-    //CREATE
-    createDocument(object){
-        let array;
+    //CONNECT
+    async connectToDB(){
         try {
-            array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-            this.lastID ++;
-            object.id = this.lastID;
-            object.timeStamp = timeStamp();
-            array.push(object);
+            await mongoose.connect(this.url,{
+                useNewUrlParser: true,
+                useUnifiedTopology: true
+            })
+            console.log('Conectado a MongoDB');
         } catch (error) {
-            return error;
+            let myError = `ERROR al conectar a la base de datos: ${error}`
+            console.log(myError);
+            return myError;
         }
-        
+    }
+
+    //CHECK ID
+    async checkId(){
         try {
-            fs.writeFileSync(this.workFile, JSON.stringify(array, null, 2));
-            return object.id;
-        } catch(error) {
+            let idToUse;
+            let auxObject = await this.model.find({}).sort({ourId: -1}).limit(1);
+            if (auxObject.length == 0){
+                idToUse = 0;
+            } else {
+                idToUse = auxObject[0].ourId;
+            }
+            return idToUse;
+        } catch (error) {
             return error;
         }
     }
 
-    //READ ONE
-    getById(number){
-        let objectAux;
-        let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-        array.forEach( item => {
-            if(item.id == number){
-                objectAux = item;
+    //CREATE
+    async createMongo(object){
+        let retorno = this.checkId().then(async (id) => {
+            try {
+                this.lastID = id + 1;
+                object.ourId = this.lastID;
+                let added = await this.model.insertMany(object);
+                return added;
+            } catch (error) {
+                return error;
             }
         });
-        if(objectAux === undefined){
-            console.log(`El ID ${number} no existe.`);
-            return { error : 'producto no encontrado' }
-        } else {
-            console.log('Se devolvió el objeto solicitado con exito.\n');
-            return objectAux;
+        return retorno;
+    }
+
+    //READ ONE (byId)
+    async readMongo(prop){
+        try {
+            let document = await this.model.find(prop);
+            return document;
+        } catch (error) {
+            return {Error: `Falló la búsqueda: ${error}`};
         }
     }
 
     //READ ALL
-    getAll(){
-        let todo, flag;
+    async readAllMongo(){
         try {
-            todo = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-            flag = true;
+            let document = await this.model.find({});
+            return document;
         } catch (error) {
-            flag = false;
-        }
-        if (flag){
-            return todo;
-        } else {
-            return 'error al mostrar todos los objetos';
+            return error;
         }
     }
 
     //UPDATE
-    updateById(numero, objeto){
-        let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-        let indexObj = array.findIndex(element => element.id === numero);
-        if (indexObj == -1){
-            console.log(`El producto con id ${numero} no existe`);
-            return { error : 'producto no encontrado' }
-        } else {
-            objeto.id = numero;
-            array[indexObj] = objeto;
-            fs.writeFileSync(this.workFile, JSON.stringify(array,null,2));
-            console.log(`Objeto con ID ${numero} actualizado correctamente`);
-            return objeto;
+    async updateMongo(idFind, change){
+        if (typeof idFind == 'number'){
+            try {
+                let updated = await this.model.updateOne({ourId: idFind},{$set: change});
+                return updated;
+            } catch (error) {
+                return error;
+            }
         }
     }
 
     //DELETE ONE
-    deleteById(number){
-        let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-        let idObject = array.findIndex(object => object.id === number);
-        if (idObject === -1){
-            console.log(`El indice ${number} no existe`);
-            return { error : 'producto no encontrado' }
-        } else {
-            array.splice(idObject, 1);
-            fs.writeFileSync(this.workFile, JSON.stringify(array, null, 2));
-            console.log(`El objeto con ID ${number} fue eliminado exitosamente.`);
-            return { hecho : `El objeto con ID ${number} fue eliminado exitosamente.` }
+    async deleteMongo(idFind){
+        if (typeof idFind == 'number') {
+            try {
+                let deleted = await this.model.deleteOne().where({ourId:{$eq: idFind}});
+                return deleted;
+            } catch (error) {
+                return error;
+            }
         }
     }
 
     //DELETE ALL
-    deleteAll(){
-        const arrayVacio = [];
+    async deleteAllMongo(){
         try {
-            fs.writeFileSync(this.workFile, JSON.stringify(arrayVacio));
-            console.log('Todos los objetos en',this.workFile,'fueron borrados');
-            return { hecho : `¡La lista fue eliminada completamente!`}
+            await this.model.deleteMany({});
+            return true;
         } catch (error) {
-            console.log('Error: no se pudo borrar los datos');
+            return error;
         }
     }
 
 }
 
-//let container = new Contenedor('../data/container.json');
+//let container = new ContenedorMongo(model,URL);
 
-let prueba = {
-    title: "esto es una prueba"
-}
+/* let prueba = {};
+let cambio = {ourId: 15}; */
 
-let prueba2 = {
-    title: "esto es una actualizacion"
-}
+//Conectarse a la base de datos
+//container.connectToDB();
 
-// Uso del método "save"
-//countainer.save(prueba);
+// Uso de Check ID
+//container.checkId();
 
-// Uso del método getById
-//countainer.getById(4);
+// Uso del método createMongo
+/* console.log(container.createMongo(prueba).then((res) => {
+    let documento = res;
+    console.log('DOCUMENTO: ', documento);
+})); */
 
-// Uso del método getAll
-//console.log((container.getAll()));
+// Uso del método readMongo
+/* console.log(container.readMongo({ourId: 1}).then((res) => {
+    let documento = res;
+    console.log('DOCUMENTO: ', documento);
+})); */
 
-// Uso del método deleteById
-//countainer.deleteById(2);
+// Uso del método getAllMongo
+/* console.log(container.readAllMongo().then((res) => {
+    let documento = res;
+    console.log('DOCUMENTO: ', documento);
+})); */
 
-// Uso del método deleteAll
-//libreria.deleteAll();
+// Uso del método updateMongo
+/* console.log(container.updateMongo(2, cambio).then((res) => {
+    let documento = res;
+    console.log('DOCUMENTO: ', documento);
+})); */
 
-// Uso del método updateById
-//container.updateById(1,prueba2)
+// Uso del método deleteMongo
+/* console.log(container.deleteMongo(2).then((res) => {
+    let documento = res;
+    console.log('DOCUMENTO: ', documento);
+})); */
 
-module.exports = Contenedor;
+// Uso del método deleteAllMongo
+/* console.log(container.deleteAllMongo().then((res) => {
+    let documento = res;
+    console.log('DOCUMENTO: ', documento);
+})); */
+
+module.exports = ContenedorMongo;

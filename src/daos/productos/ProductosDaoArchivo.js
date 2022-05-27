@@ -12,7 +12,7 @@ class Productos extends Contenedor {
         super(dir);
     }
 
-    saveProduct(productToAdd){
+    createProduct(productToAdd){
         let rightNow = timeStamp();
         let productos = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
         let flag = true;
@@ -41,22 +41,38 @@ class Productos extends Contenedor {
         }
     }
     
-    updateProductById(idProduct,product){
+    readProduct(id){
+
+    }
+
+    readAllProducts(){
+
+    }
+
+    updateProduct(id,changes){
         let rightNow = timeStamp();
         let productos = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-        let indexProduct = productos.findIndex(element => element.id === idProduct);
+        let indexProduct = productos.findIndex(element => element.id === id);
         console.log(indexProduct);
         if (indexProduct == -1){
-            console.log(`El producto con id ${idProduct} no existe`);
+            console.log(`El producto con id ${id} no existe`);
             return { error : 'producto no encontrado' }
         } else {
-            product.id = idProduct;
-            product.timeStamp = rightNow;
-            productos[indexProduct] = product;
+            changes.id = id;
+            changes.timeStamp = rightNow;
+            productos[indexProduct] = changes;
             fs.writeFileSync(this.workFile, JSON.stringify(productos,null,2));
-            console.log(`Objeto con ID ${idProduct} actualizado correctamente`);
-            return product;
+            console.log(`Objeto con ID ${id} actualizado correctamente`);
+            return changes;
         }
+    }
+
+    deleteProduct(id){
+
+    }
+
+    deleteAllProducts(){
+        
     }
 }
 
@@ -79,10 +95,16 @@ let anotherProduct = {
     code: 568734765698
 }
 
-// MODULO QUE AGREGA UN PREODUCTO NUEVO A LA LISTA DE PRODUCTOS
-//product.saveProduct(anotherProduct);
+// MODULO QUE CREA UN PRODUCTO
 
-// MODULO QUE ACTUALIZA UN PRODUCTO
-//product.updateProductById(2,productoAux);
+// MODULO QUE LEE UN PRODUCTO POR ID
 
-module.exports = product;
+// MODULO QUE LEE TODOS LOS PRODUCTOS
+
+// MODULO QUE ACTUALIZA UN PRODUCTO SEGUN ID Y CAMBIOS
+
+// MODULO QUE ELIMINA UN PRODUCTO SEGÚN SU ID
+
+// MODULO QUE ELIMINA TODOS LOS PRODUCTOS
+
+//module.exports = product;

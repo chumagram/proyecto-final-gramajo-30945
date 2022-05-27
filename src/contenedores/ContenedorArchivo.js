@@ -55,7 +55,7 @@ class Contenedor {
     }
 
     //READ ONE
-    getById(number){
+    readById(number){
         let objectAux;
         let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
         array.forEach( item => {
@@ -73,7 +73,7 @@ class Contenedor {
     }
 
     //READ ALL
-    getAll(){
+    readAll(){
         let todo, flag;
         try {
             todo = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
@@ -146,11 +146,11 @@ let prueba2 = {
 // Uso del método "save"
 //countainer.save(prueba);
 
-// Uso del método getById
-//countainer.getById(4);
+// Uso del método readById
+//countainer.readById(4);
 
-// Uso del método getAll
-//console.log((container.getAll()));
+// Uso del método readAll
+//console.log((container.readAll()));
 
 // Uso del método deleteById
 //countainer.deleteById(2);

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
-//const model = require('../models/containerModel.js');
-//const URL = 'mongodb+srv://chumagram:test1234@cluster0.ar5vn.mongodb.net/container?retryWrites=true&w=majority';
+/* const model = require('../models/containerModel.js');
+const URL = 'mongodb+srv://chumagram:test1234@cluster0.ar5vn.mongodb.net/container?retryWrites=true&w=majority'; */
 
 class ContenedorMongo {
 
@@ -10,7 +10,7 @@ class ContenedorMongo {
         this.url = url;
         this.lastID;
     }
-    
+
     //CONNECT
     async connectToDB(){
         try {
@@ -131,10 +131,7 @@ let cambio = {ourId: 15}; */
 })); */
 
 // Uso del método readMongo
-/* console.log(container.readMongo({ourId: 1}).then((res) => {
-    let documento = res;
-    console.log('DOCUMENTO: ', documento);
-})); */
+//container.readMongo({ourId: 1}).then((res) => console.log(res));
 
 // Uso del método getAllMongo
 /* console.log(container.readAllMongo().then((res) => {

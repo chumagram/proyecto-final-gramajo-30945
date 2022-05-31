@@ -1,6 +1,5 @@
-const { query } = require("express");
 const admin = require("firebase-admin");
-const serviceAccount = require("../data/store-wars-8dda5-firebase-adminsdk-ibhpt-3955ae495a.json");
+//const serviceAccount = require("../data/store-wars-8dda5-firebase-adminsdk-ibhpt-3955ae495a.json");
 
 class ContenedorFirebase {
 
@@ -8,13 +7,19 @@ class ContenedorFirebase {
     constructor(serviceAccount,myCollection){
         this.serviceAccount = serviceAccount;
         this.collection = myCollection;
+        this.query = this.connectFirebase();
     }
 
     //CONNECT
     connectFirebase(){
-        admin.initializeApp({
+        /* admin.initializeApp({
             credential: admin.credential.cert(this.serviceAccount)
-        });
+        }); */
+        if (admin.apps.length === 0) {
+            admin.initializeApp({
+                credential: admin.credential.cert(this.serviceAccount)
+            });
+        }
         const db = admin.firestore();
         const query = db.collection(this.collection);
         return query;
@@ -22,30 +27,65 @@ class ContenedorFirebase {
 
     //CREATE
     async createFirebase(object){
-        let query = this.connectFirebase();
-        let arrayId, idToUse;
-
+        let response;
         try {
-            const querySnapshot = await query.get();
+            // GETTING THE DOCUMENT
+            const querySnapshot = await this.query.get();
             let docs = querySnapshot.docs;
-            arrayId = docs.map((doc) => (parseInt(doc.id)));
-            idToUse = Math.max(...arrayId) + 1;
-            let doc = query.doc(`${idToUse}`);
-            await doc.create(object);
-            return idToUse;
-        } catch (error) {
-            return error;
+            response = docs.map((doc) => ({id: doc.id}));
+
+            if (response.length == 0){ // SI LA LISTA ESTABA VACÍA
+                let id = 1;
+                let doc = this.query.doc(`${id}`);
+                await doc.create(object);
+                return id;
+            } else { // SI LA LISTA NO ESTA VACIA
+
+                // Calculando el id a asignar
+                let max = Math.max(...response.map(document => parseInt(document.id)));
+                let newId = max + 1;
+                
+                // Creando el documento
+                let doc = this.query.doc(`${newId}`);
+                await doc.create(object);
+                return newId;
+            }
+        } 
+        catch (error){
+            return { error: `Fallo por createFirebase:${error}`};
         }
     }
 
     //READ ONE (byId)
-    async readByIdFirebase(id){
-        let query = this.connectFirebase();
+    async readDocumentFirebase(objFind){
         try {
-            const doc = query.doc(`${id}`);
-            const item = await doc.get();
-            const response = item.data();
-            return response;
+            const querySnapshot = await this.query.get();
+            let docs = querySnapshot.docs, readed = [], propFind, docFound;
+            let flagFind = true, flagKey = true; // Banderas
+            for (let key in objFind) {propFind = key};
+
+            docs.forEach(doc => {
+                let docId = {id: parseInt(doc.id)}
+                let props = doc.data();
+                readed = Object.assign(docId,props);
+                for (let key in readed) {
+                    if (propFind == key) {
+                        flagKey = false;
+                        if (objFind[key] == readed[key]){
+                            flagFind = false;
+                            docFound = readed;
+                        }
+                    }
+                }
+            });
+
+            if (flagKey){
+                return {error: `La propiedad ${propFind} no existe en ningún documento`};
+            } else if (flagFind){
+                return {error: `No se encontró documento con ${propFind}: ${objFind[propFind]}`};
+            } else {
+                return docFound;
+            }
         } catch (error) {
             return error;
         }
@@ -53,12 +93,15 @@ class ContenedorFirebase {
 
     //READ ALL
     async readAllFirebase(){
-        let query = this.connectFirebase();
         try {
-            const querySnapshot = await query.get();
-            let docs = querySnapshot.docs;
-            const response = docs.map((doc) => ({id: doc.id}));
-            return response;
+            const querySnapshot = await this.query.get();
+            let docs = querySnapshot.docs, arrayReaded = [];
+            docs.forEach(doc => {
+                let docId = {id: parseInt(doc.id)}
+                let props = doc.data();
+                arrayReaded.push(Object.assign(docId,props));
+            });
+            return arrayReaded;
         } catch (error) {
             return error;
         }
@@ -66,36 +109,41 @@ class ContenedorFirebase {
 
     //UPDATE
     async updateFirebase(idFind, change){
-        let query = this.connectFirebase();
         if (typeof idFind == 'number'){
             try {
-                const doc = query.doc(`${idFind}`);
+                const doc = this.query.doc(`${idFind}`);
                 let updated = await doc.update(change);
                 return updated;
             } catch (error) {
-                return error;
+                return {error: error};
             }
         }
     }
 
     //DELETE ONE
     async deleteFirebase(idFind){
-        let query = this.connectFirebase();
         if (typeof idFind == 'number') {
             try {
-                const doc = query.doc(`${idFind}`);
-                let deleted = await doc.delete();
-                return deleted;
+                let readed = await this.readDocumentFirebase({id: idFind});
+                if (readed.error) {
+                    return {error:`no se encontro el documento con id ${idFind}`}
+                } else {
+                    const doc = this.query.doc(`${idFind}`);
+                    await doc.delete();
+                    return {hecho: `el documento con id ${idFind} fue eliminado`};
+                }
             } catch (error) {
-                return error;
+                return { error: `Error al eliminar el documento: ${error}` };
             }
+        } else {
+            return { error: `el parametro pasado ${idFind} no es válido` };
         }
     }
 
     //DELETE ALL
     async deleteAllFirebase(){
         try {
-            await this.connectFirebase().get().then(response => {
+            await this.query.get().then(response => {
                 response.forEach((element)=>{
                     element.ref.delete();
                 })
@@ -107,28 +155,33 @@ class ContenedorFirebase {
     }
 }
 
-let container = new ContenedorFirebase(serviceAccount,'container');
+//let container = new ContenedorFirebase(serviceAccount,'container');
 
-let prueba = {};
+let prueba = {nombre: 'Checho1'};
 let cambio = {nombre: 'Checho2'};
+let productToAdd = {
+    name: "Peluche de Grogu",
+    price:80,
+    description:"La cosa mas tierna que veras en tu vida y de toda la galaxia basicamente.",
+    thumbnail: "https://m.media-amazon.com/images/I/81-ustlVcwL._AC_SX569_.jpg",
+    stock: 40,
+    code: 568734765699
+}
 
 //Conectarse a la base de datos
 //container.connectToFirebase();
 
-// Uso de Check ID
-//container.checkId().then((res) => console.log(res));
-
 // Uso del método createFirebase
-//container.createFirebase(prueba).then((res) => console.log(res));
+//container.createFirebase(productToAdd).then((res) => console.log(res));
 
-// Uso del método readByIdMongo
-//container.readByIdFirebase(1).then((res) => console.log(res));
+// Uso del método readDocumentFirebase
+//container.readDocumentFirebase({cod: 568734765699}).then((res) => console.log(res));
 
 // Uso del método readAllFirebase
 //container.readAllFirebase().then((res) => console.log(res));
 
 // Uso del método updateFirebase
-//container.updateFirebase(10, cambio).then((res) => console.log(res));
+//container.updateFirebase(1, productToAdd).then((res) => console.log(res));
 
 // Uso del método deleteFirebase
 //container.deleteFirebase(2).then((res) => console.log(res));
@@ -136,4 +189,4 @@ let cambio = {nombre: 'Checho2'};
 // Uso del método deleteAllFirebase
 //container.deleteAllFirebase().then((res) => console.log(res));
 
-//module.exports = ContenedorMongo;
+module.exports = ContenedorFirebase;

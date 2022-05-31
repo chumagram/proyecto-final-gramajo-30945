@@ -9,15 +9,13 @@ class CarritoMongo extends ContenedorMongo {
     }
 
     //CREATE NEW CART
-    async createCartMongo(){
+    async createCart(){
         try {
             let cartToAdd = {};
-            let createCarrito = await this.createMongo(cartToAdd);
-            const okReturn = `carrito con id ${createCarrito} creado con éxito`;
-            return okReturn;
-        } catch (error) { 
-            const errReturn = `ERROR al crear el carrito: ${error}`;
-            return errReturn;
+            let newCart = await this.createMongo(cartToAdd);
+            return newCart[0].ourId;
+        } catch (error) {
+            return { error:`ERROR al crear el carrito: ${error}` };
         }
     }
 
@@ -37,25 +35,27 @@ class CarritoMongo extends ContenedorMongo {
     }
 
     // UPDATE ADD TO CART
-    async addToCartMongo(idProducto,idCart){
+    async addToCart(idProduct,idCarrito){
         // verificaciones ce producto y carrito pasados como parametro
+        let idProducto = parseInt(idProduct);
+        let idCart = parseInt(idCarrito);
         let productToAdd;
         let cartToUpdate;
         try {
             productToAdd = await product.readMongo({ourId: idProducto});
             cartToUpdate = await this.readMongo({ourId: idCart});
             if (productToAdd.length == 0) {
-                return {Error: `producto no encontrado`}
+                return {error: `producto no encontrado`}
             }
             if (cartToUpdate.length == 0){
-                return {Error: `carrito no encontrado`}
+                return {error: `carrito no encontrado`}
             }
         } catch(error) {
-            return {Error:`Falla de búsqueda: ${error}`};
+            return {error:`Falla de búsqueda: ${error}`};
         }
 
         // actualizaciones del carrito
-        let cartAux = cartToUpdate[0];
+        let cartAux = {listP: cartToUpdate[0].listP};
         let productAux = productToAdd[0];
         let productUpdated = {
             name: productAux.name,
@@ -75,22 +75,25 @@ class CarritoMongo extends ContenedorMongo {
                     }
                 });
                 if (flag){ // ya estaba el producto en el carrito
-                    return await this.updateMongo(idCart,cartAux);
+                    await this.updateMongo(idCart,cartAux);
+                    return {hecho:`cantidad de producto incremetada en 1`};
                 } else { // no estaba el producto en el carrito
                     cartAux.listP.push(productUpdated);
-                    return await this.updateMongo(idCart,cartAux);
+                    await this.updateMongo(idCart,cartAux);
+                    return {hecho:`producto añadido al carrito`};
                 }
             } else { // si el carrito no tenia productos
                 cartAux.listP = [productUpdated];
-                return await this.updateMongo(idCart,cartAux);
+                await this.updateMongo(idCart,cartAux);
+                return {hecho:`producto añadido al carrito`}; 
             }
         } catch (error) {
-            return {Error:`Falla de actualización: ${error}`};
+            return {error:`Falla de actualización: ${error}`};
         }
     }
 
     // UPDATE DELETE PRODUCT FROM CART
-    async deleteFromCartMongo(idProducto, idCart){
+    async deleteFromCart(idProducto, idCart){
         // verificaciones ce producto y carrito pasados como parametro
         let productToDelete;
         let cartToUpdate;
@@ -98,13 +101,13 @@ class CarritoMongo extends ContenedorMongo {
             productToDelete = await product.readMongo({ourId: idProducto});
             cartToUpdate = await this.readMongo({ourId: idCart});
             if (productToDelete.length == 0) {
-                return {Error: `el producto ${idProducto} no existe`}
+                return {error: `el producto ${idProducto} no existe`}
             }
             if (cartToUpdate.length == 0){
-                return {Error: `carrito no encontrado`}
+                return {error: `carrito no encontrado`}
             }
         } catch(error) {
-            return {Error:`Falla de búsqueda: ${error}`};
+            return {error:`Falla de búsqueda: ${error}`};
         }
 
         // actualizaciones del carrito
@@ -116,24 +119,26 @@ class CarritoMongo extends ContenedorMongo {
                     if (codeToDelete == element.code) return true;
                 });
                 if ((index == -1)) { // el producto existe pero no en el carrito
-                    return {Error:`ATENCIÓN: el producto ${idProducto} no se encontró en el carrito`};
+                    return {error:`ATENCIÓN: el producto ${idProducto} no se encontró en el carrito`};
                 } else if (cartAux.listP[index].quantity > 1) { // mas de un producto
                     cartAux.listP[index].quantity--;
-                    return await this.updateMongo(idCart,cartAux);
+                    await this.updateMongo(idCart,cartAux);
+                    return { hecho: `la cantidad del producto fue mermada en 1`}
                 } else if(cartAux.listP[index].quantity == 1) { // si había solo un producto
                     cartAux.listP.splice(index,1);
-                    return await this.updateMongo(idCart,cartAux);
+                    await this.updateMongo(idCart,cartAux);
+                    return { hecho: `el producto fue eliminado del carrito ${idCart}`}
                 }
             } else { // si el carrito no tenia productos
-                return {Error:`ATENCIÓN: el carrito no tenia productos`};
+                return {error:`ATENCIÓN: el carrito no tenia productos`};
             }
         } catch (error) {
-            return {Error:`ATENCIÓN: falla de actualización: ${error}`};
+            return {error:`ATENCIÓN: falla de actualización: ${error}`};
         }
     }
 
     // UPDATE DELETE ALL THE PRODUCTS FROM CART
-    async deleteAllFromCartMongo(idCart){
+    async deleteAllFromCart(idCart){
         let cartToUpdate;
         try {
             cartToUpdate = await this.readMongo({ourId: idCart});
@@ -153,13 +158,13 @@ class CarritoMongo extends ContenedorMongo {
     }
 
     // DELETE CART
-    async deleteCartMongo(idCart){
+    async deleteCart(idCart){
         try {
             let retorno = await this.deleteMongo(idCart);
             if (retorno.deletedCount == 0) {
                 return {Error: `El carrito ${idCart} no existe`};
             } else {
-                return {Hecho: `Carrito ${idCart} eliminado con éxito: ${retorno}`};
+                return {Hecho: `Carrito ${idCart} eliminado con éxito`};
             } 
         } catch (error) {
             return {Error: `Falla al eliminar el carrito: ${error}`};

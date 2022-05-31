@@ -13,53 +13,52 @@ class Carrito extends Contenedor {
     }
 
     //CREATE NEW CART
-    createCart(){
+    async createCart(){
         try {
             let cartToAdd = {};
-            let createCarrito = this.createDocument(cartToAdd);
-            const okReturn = `carrito con id ${createCarrito} creado con éxito`;
-            console.log(okReturn);
-            return okReturn;
+            let created = this.createDocument(cartToAdd);
+            return created.id;
         } catch (error) { 
-            const errReturn = `ERROR al crear el carrito: ${error}`;
-            console.log(errReturn);
-            return errReturn;
+            return { error: `ERROR al crear el carrito: ${error}`};
         }
     }
 
     // READ CART
-    readCart(idCarrito){
-        let cartAux = this.readById(idCarrito);
+    async readCart(idCarrito){
+        let cartAux = this.readDocument({id: idCarrito});
         if (cartAux.id){
-            return cartAux
+            return cartAux;
         } else if (cartAux.error){
-            return {Error: "carrito no encontrado"}
+            return {Error: "carrito no encontrado"};
         }
     }
 
     // UPDATE ADD TO CART
-    addToCart(idProducto,idCart){
-        let productToAdd = product.readById(idProducto);
+    async addToCart(idProducto,idCart){
+        let productToAdd = await product.readProduct(idProducto);
         let cartList, flagCarrito = true, auxList = [];
-
+        // TRAE TODOS LOS CARRITOS
         try {
             cartList = this.readAll();
         } catch(error) {
             return {Error:`ERROR al listar los carritos: ${error}`};
         }
-
+        // RECORREMOS LA LISTA DE CARRITOS
         let cartUpdated;
         cartList.forEach( carrito => {
             if(carrito.id == idCart){
                 if (carrito.listaP) auxList = carrito.listaP;
                 let flag = true;
+                // RECORREMOS LA LISTA DE PRODUCTOS EN EL CARRITO
                 auxList.forEach(producto => {
                     if (producto.id == productToAdd.id) {
                         producto.quantity+=1;
-                        flag = false;
                         carrito.timeStamp = timeStamp();
+                        flag = false;
                     }
-                })
+                });
+
+                // SI EL PRODUCTO NO ESTABA EN EL CARRITO - TRUE
                 if (flag){
                     productToAdd.quantity = 1;
                     if (productToAdd.stock){
@@ -69,6 +68,7 @@ class Carrito extends Contenedor {
                     auxList.push(productToAdd);
                     carrito.timeStamp = timeStamp();
                 }
+
                 cartUpdated = Object.assign(carrito, { listaP: auxList });
                 flagCarrito = false;
             }
@@ -77,21 +77,19 @@ class Carrito extends Contenedor {
         if (productToAdd.error){
             return productToAdd.error
         }else if (flagCarrito){
-            return {Error:`Carrito ${idCart} no encontrado`}
+            return {error:`Carrito ${idCart} no encontrado`}
         } else {
             try {
-                this.updateById(idCart,cartUpdated);
-                console.log(`Exito: producto añadido al carrito`);
-                return { Hecho: `Producto añadido al carrito ${idCart} exitosamente`}
+                let aux = this.updateDocument(idCart,cartUpdated);
+                return { hecho: `Producto añadido al carrito ${idCart} exitosamente`}
             } catch(error) {
-                console.log('Error: no se pudo añadir al carrito');
-                return { Error:`Falla al añadir el producto al carrito`}
+                return { error:`Falla al añadir el producto al carrito`}
             }
         }
     }
 
     // UPDATE DELETE PRODUCT FROM CART
-    deleteFromCart(idProducto, idCart){
+    async deleteFromCart(idProducto, idCart){
         let cartList = this.readAll();
         let flagProduct = true;
         let flagNoCart = true;
@@ -118,21 +116,21 @@ class Carrito extends Contenedor {
         });
 
         if (!flagProduct) {
-            return {Error:`Error: Producto ${idProducto} no encontrado en el carrito`}
+            return {error:`Error: Producto ${idProducto} no encontrado en el carrito`}
         } else if (flagNoCart){
-            return {Error:`Error: El carrito ${idCart} no existe`}
+            return {error:`Error: El carrito ${idCart} no existe`}
         } else {
             try {
-                this.updateById(idCart,cartUpdated)
-                return {Hecho: 'ATENCIÓN: producto eliminado del carrito'}
+                this.updateDocument(idCart,cartUpdated)
+                return { hecho: 'ATENCIÓN: producto eliminado del carrito' };
             } catch(error) {
-                return {Error: "ERROR al eliminar el producto del carrito"}
+                return { error: "ERROR al eliminar el producto del carrito" };
             }
         }
     }
 
     // UPDATE DELETE ALL THE PRODUCTS FROM CART
-    deleteAllFromCart(idCart){
+    async deleteAllFromCart(idCart){
         let cartList = this.readAll();
         let flag = true;
         let cartUpdated;
@@ -157,9 +155,9 @@ class Carrito extends Contenedor {
     }
 
     // DELETE CART
-    deleteCart(idCart){
+    async deleteCart(idCart){
         try {
-            let retorno = this.deleteById(idCart);
+            let retorno = this.deleteDocument(idCart);
             return retorno;
         } catch (error) {
             return {Error: `Falló eliminar el carrito ${idCart}: ${error}`};

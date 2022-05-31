@@ -1,5 +1,3 @@
-const path = require('path');
-const mongoose = require('mongoose');
 const ContenedorMongo = require('../../contenedores/ContenedorMongoDb.js');
 const Model = require('../../models/productoModel.js');
 const URL = 'mongodb+srv://chumagram:test1234@cluster0.ar5vn.mongodb.net/store-wars?retryWrites=true&w=majority';
@@ -7,41 +5,88 @@ const URL = 'mongodb+srv://chumagram:test1234@cluster0.ar5vn.mongodb.net/store-w
 class ProductosMongo extends ContenedorMongo {
     constructor(model,url){
         super(model,url);
+        /* this.model == model;
+        this.url == url; */
     }
-    
-    async createProductMongo(productToAdd){
+
+    // CREAR UN NUEVO PRODUCTO SI ES QUE YA NO EXISTE, SINO ACTUALIZA EL STOCK
+    async createProduct(productToAdd){
         try {
             let doc = await this.readMongo({code: productToAdd.code});
             if (doc.length == 0) {
-                return await this.createMongo(productToAdd);
+                let created = await this.createMongo(productToAdd);
+                return { hecho: `Producto con ID ${created[0].ourId} creado con éxito`};
             } else {
                 let id = doc[0].ourId;
                 productToAdd.stock = doc[0].stock + productToAdd.stock;
-                return await this.updateMongo(id,productToAdd);
+                await this.updateMongo(id,productToAdd);
+                return { hecho:`el stock del producto ${id} fue actualizado`};
             }
         } catch (error) {
-            return {Error: `Falla al agregar el Producto: ${error}`}
+            return { error: `Falla al agregar el Producto: ${error}` }
         }
     }
 
-    async readProductMongo(id){
-
+    // LEER UN PRODUCTO SEGUN SU ID
+    async readProduct(id){
+        try {
+            let readed = await this.readMongo({ourId: id});
+            if (readed.length == 0){
+                return {error: `No se encontró el producto con id ${id}`}
+            } else {
+                return readed;
+            }
+        } catch (error) {
+            return {Error: `Falla al agregar el Producto: ${error}`};
+        }
     }
 
-    async readAllProductsMongo(){
-
+    // LEER TODOS LOS PRODUCTOS ALMACENADOS
+    async readAllProducts(){
+        try {
+            let readed = await this.readAllMongo();
+            return readed;
+        } catch (error) {
+            return { error: `Falló la lectura de la lista de productos: ${error}` }
+        }
     }
 
-    async updateProductMongo(idProduct,changes){
-
+    // ACTUALIZAR UN PRODUCTO SEGUN SI ID
+    async updateProduct(idProduct,changes){
+        try {
+            let updated = await this.updateMongo(idProduct,changes);
+            if (updated.modifiedCount == 0) {
+                return { error: `No se encontró el producto con id ${idProduct}`};
+            } else {
+                return { hecho: `el producto con id ${idProduct} fue actualizado`};
+            }
+        } catch (error) {
+            return { error: `Falló la actualización del producto: ${error}`}
+        }
     }
 
-    async deleteProductMongo(){
-
+    // ELIMINAR UN PRODUCTO SEGÚN SU ID
+    async deleteProduct(id){
+        try {
+            let deleted = await this.deleteMongo(id);
+            if (deleted.deletedCount == 0) {
+                return { error: `No se encontró el producto con id ${id}`};
+            } else {
+                return { hecho: `El producto con id ${id} fue eliminado`};
+            }
+        } catch (error) {
+            return { error: `falló la eliminación del producto: ${error}`}
+        }
     }
 
-    async deleteAllProductsMongo(){
-
+    // ELIMINAR TODOS LOS PRODUCTOS
+    async deleteAllProducts(){
+        try {
+            this.deleteAllMongo();
+            return { hecho: 'Se borraron todos los productos'}
+        } catch (error) {
+            return { error: `falló la eliminación todos los productos: ${error}`}
+        }
     }
 }
 
@@ -65,20 +110,25 @@ let productToAdd = {
     code: 568734765698
 }
 
-// PRUEBA DE CONEXIÓN
-//product.connectToDB();
+//Conectarse a la base de datos
+productMongo.connectToDB();
 
 // MODULO QUE CREA UN PRODUCTO
-//product.createProductMongo(productoAux).then((res) => console.log(res));
+//productMongo.createProductMongo(productoAux).then((res) => console.log(res));
 
 // MODULO QUE LEE UN PRODUCTO POR ID
+//productMongo.readProductMongo(3).then((res) => console.log(res));
 
 // MODULO QUE LEE TODOS LOS PRODUCTOS
+//productMongo.readMongo().then((res) => console.log(res));
 
 // MODULO QUE ACTUALIZA UN PRODUCTO SEGUN ID Y CAMBIOS
+//productMongo.updateMongo(1,{price: 82}).then((res) => console.log(res));
 
 // MODULO QUE ELIMINA UN PRODUCTO SEGÚN SU ID
+//productMongo.deleteProductMongo(53).then((res) => console.log(res));
 
 // MODULO QUE ELIMINA TODOS LOS PRODUCTOS
+//productMongo.deleteAllProductsMongo().then((res) => console.log(res));
 
-//module.exports = productMongo;
+module.exports = productMongo;

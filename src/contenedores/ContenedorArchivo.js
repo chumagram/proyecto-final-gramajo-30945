@@ -48,27 +48,34 @@ class Contenedor {
         
         try {
             fs.writeFileSync(this.workFile, JSON.stringify(array, null, 2));
-            return object.id;
+            return object;
         } catch(error) {
-            return error;
+            return {Error: `Error al crear el documento: ${error}`};
         }
     }
 
-    //READ ONE
-    readById(number){
-        let objectAux;
+    //READ ONE DOCUMENT
+    readDocument(objFind){
+        let prop,docFound, flagFind = true, flagKey = true;
+        for (let key in objFind) {prop = key};
         let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-        array.forEach( item => {
-            if(item.id == number){
-                objectAux = item;
+        array.forEach( element => {
+            for (let key in element) {
+                if (prop == key) {
+                    flagKey = false;
+                    if (objFind[key] == element[key]){
+                        flagFind = false;
+                        docFound = element;
+                    }
+                }
             }
         });
-        if(objectAux === undefined){
-            console.log(`El ID ${number} no existe.`);
-            return { error : 'producto no encontrado' }
+        if (flagKey){
+            return {error: `La propiedad ${prop} no existe en ningún documento`};
+        } else if (flagFind){
+            return {error: `No se encontró ningún documento con "${prop}: ${objFind[prop]}"`};
         } else {
-            console.log('Se devolvió el objeto solicitado con exito.\n');
-            return objectAux;
+            return docFound;
         }
     }
 
@@ -89,33 +96,30 @@ class Contenedor {
     }
 
     //UPDATE
-    updateById(numero, objeto){
+    updateDocument(numero, objeto) {
         let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-        let indexObj = array.findIndex(element => element.id === numero);
+        let indexObj = array.findIndex(element => element.id == numero);
         if (indexObj == -1){
-            console.log(`El producto con id ${numero} no existe`);
-            return { error : 'producto no encontrado' }
+            return { error : `el documento con id ${numero} no existe` }
         } else {
             objeto.id = numero;
             array[indexObj] = objeto;
             fs.writeFileSync(this.workFile, JSON.stringify(array,null,2));
-            console.log(`Objeto con ID ${numero} actualizado correctamente`);
-            return objeto;
+            return { hecho: `Documento con id ${numero} actualizado correctamente` };
         }
     }
 
     //DELETE ONE
-    deleteById(number){
+    deleteDocument(number){
         let array = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
         let idObject = array.findIndex(object => object.id === number);
         if (idObject === -1){
-            console.log(`El indice ${number} no existe`);
-            return { error : 'producto no encontrado' }
+            return { error : 'documento no encontrado' };
         } else {
             array.splice(idObject, 1);
             fs.writeFileSync(this.workFile, JSON.stringify(array, null, 2));
             console.log(`El objeto con ID ${number} fue eliminado exitosamente.`);
-            return { hecho : `El objeto con ID ${number} fue eliminado exitosamente.` }
+            return { hecho : `El objeto con ID ${number} fue eliminado exitosamente.` };
         }
     }
 
@@ -124,10 +128,9 @@ class Contenedor {
         const arrayVacio = [];
         try {
             fs.writeFileSync(this.workFile, JSON.stringify(arrayVacio));
-            console.log('Todos los objetos en',this.workFile,'fueron borrados');
-            return { hecho : `¡La lista fue eliminada completamente!`}
+            return { hecho : `¡La lista fue eliminada completamente!` };
         } catch (error) {
-            console.log('Error: no se pudo borrar los datos');
+            return { error: 'no se pudo borrar los datos' };
         }
     }
 
@@ -147,7 +150,7 @@ let prueba2 = {
 //countainer.save(prueba);
 
 // Uso del método readById
-//countainer.readById(4);
+//console.log(container.readDocument({id: 3}));
 
 // Uso del método readAll
 //console.log((container.readAll()));

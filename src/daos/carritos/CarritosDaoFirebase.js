@@ -1,35 +1,32 @@
-const ContenedorMongo = require('../../contenedores/ContenedorMongoDb.js');
-const Model = require('../../models/carritoModel.js');
-const URL = 'mongodb+srv://chumagram:test1234@cluster0.ar5vn.mongodb.net/store-wars?retryWrites=true&w=majority';
-const product = require('../productos/ProductosDaoMongoDb.js');
+const productFirebase = require('../productos/ProductosDaoFirebase.js');
+const ContenedorFirebase = require ("../../contenedores/ContenedorFirebase.js")
+const serviceAccount = require("../../data/store-wars-8dda5-firebase-adminsdk-ibhpt-3955ae495a.json");
 
 class CarritoFirebase extends ContenedorFirebase {
-    constructor(model,url){
-        super(model,url);
+    constructor(serviceAccount,myCollection){
+        super(serviceAccount,myCollection);
     }
 
-    //CREATE NEW CART
-    async createCartMongo(){
+    // CREATE NEW CART
+    async createCart(){
         try {
             let cartToAdd = {};
-            let createCarrito = await this.createMongo(cartToAdd);
-            const okReturn = `carrito con id ${createCarrito} creado con éxito`;
-            return okReturn;
+            let createCarrito = await this.createFirebase(cartToAdd);
+            return createCarrito;
         } catch (error) { 
-            const errReturn = `ERROR al crear el carrito: ${error}`;
-            return errReturn;
+            return {error:`ERROR al crear el carrito: ${error}`};
         }
     }
 
     // READ CART
     async readCart(idCarrito){
-        let prop = {ourId: idCarrito} 
+        let prop = {id: idCarrito} 
         try {
-            let cartReaded = await this.readMongo(prop);
+            let cartReaded = await this.readDocumentFirebase(prop);
             if (cartReaded.length == 0) {
                 return {Error: `El carrito ${idCarrito} no existe`};
             } else {
-                return cartReaded[0];
+                return cartReaded;
             }
         } catch (error) {
             return {Error: `Falla de lectura: ${error}`}
@@ -37,26 +34,28 @@ class CarritoFirebase extends ContenedorFirebase {
     }
 
     // UPDATE ADD TO CART
-    async addToCartMongo(idProducto,idCart){
-        // verificaciones ce producto y carrito pasados como parametro
+    async addToCart(idProduct,idCarrito){
+        // verificaciones de producto y carrito pasados como parametro
+        let idProducto = parseInt(idProduct);
+        let idCart = parseInt(idCarrito);
         let productToAdd;
         let cartToUpdate;
         try {
-            productToAdd = await product.readMongo({ourId: idProducto});
-            cartToUpdate = await this.readMongo({ourId: idCart});
-            if (productToAdd.length == 0) {
-                return {Error: `producto no encontrado`}
+            productToAdd = await productFirebase.readProduct(idProducto);
+            cartToUpdate = await this.readCart(idCart);
+            if (productToAdd.error) {
+                return {error: `producto no encontrado`}
             }
-            if (cartToUpdate.length == 0){
-                return {Error: `carrito no encontrado`}
+            if (cartToUpdate.error){
+                return {error: `carrito no encontrado`}
             }
         } catch(error) {
-            return {Error:`Falla de búsqueda: ${error}`};
+            return {error:`Falla de búsqueda: ${error}`};
         }
-
+        
         // actualizaciones del carrito
-        let cartAux = cartToUpdate[0];
-        let productAux = productToAdd[0];
+        let cartAux = cartToUpdate;
+        let productAux = productToAdd;
         let productUpdated = {
             name: productAux.name,
             price: productAux.price,
@@ -75,14 +74,17 @@ class CarritoFirebase extends ContenedorFirebase {
                     }
                 });
                 if (flag){ // ya estaba el producto en el carrito
-                    return await this.updateMongo(idCart,cartAux);
+                    await this.updateFirebase(idCart,cartAux);
+                    return { hecho: `Quiantity aumentada en 1` };
                 } else { // no estaba el producto en el carrito
                     cartAux.listP.push(productUpdated);
-                    return await this.updateMongo(idCart,cartAux);
+                    await this.updateFirebase(idCart,cartAux);
+                    return { hecho: `producto ${idProducto} agregado al carrito ${idCart}` };
                 }
             } else { // si el carrito no tenia productos
                 cartAux.listP = [productUpdated];
-                return await this.updateMongo(idCart,cartAux);
+                await this.updateFirebase(idCart,cartAux);
+                return { hecho: `producto ${idProducto} agregado al carrito ${idCart}` };
             }
         } catch (error) {
             return {Error:`Falla de actualización: ${error}`};
@@ -90,26 +92,26 @@ class CarritoFirebase extends ContenedorFirebase {
     }
 
     // UPDATE DELETE PRODUCT FROM CART
-    async deleteFromCartMongo(idProducto, idCart){
+    async deleteFromCart(idProducto, idCart){
         // verificaciones ce producto y carrito pasados como parametro
         let productToDelete;
         let cartToUpdate;
         try {
-            productToDelete = await product.readMongo({ourId: idProducto});
-            cartToUpdate = await this.readMongo({ourId: idCart});
-            if (productToDelete.length == 0) {
-                return {Error: `el producto ${idProducto} no existe`}
+            productToDelete = await productFirebase.readProduct(idProducto);
+            cartToUpdate = await this.readCart(idCart);
+            if (productToDelete.error) {
+                return {error: `el producto ${idProducto} no existe`}
             }
-            if (cartToUpdate.length == 0){
-                return {Error: `carrito no encontrado`}
+            if (cartToUpdate.error){
+                return {error: `carrito no encontrado`}
             }
         } catch(error) {
-            return {Error:`Falla de búsqueda: ${error}`};
+            return {error:`Falla de búsqueda: ${error}`};
         }
 
         // actualizaciones del carrito
-        let cartAux = cartToUpdate[0];
-        let codeToDelete = productToDelete[0].code;
+        let cartAux = cartToUpdate;
+        let codeToDelete = productToDelete.code;
         try {
             if (cartAux.listP) { // si el carrito ya tenia productos
                 let index = cartAux.listP.findIndex((element) => {
@@ -119,10 +121,12 @@ class CarritoFirebase extends ContenedorFirebase {
                     return {Error:`ATENCIÓN: el producto ${idProducto} no se encontró en el carrito`};
                 } else if (cartAux.listP[index].quantity > 1) { // mas de un producto
                     cartAux.listP[index].quantity--;
-                    return await this.updateMongo(idCart,cartAux);
+                    await this.updateFirebase(idCart,cartAux);
+                    return { hecho:`quantity mermada en 1`};
                 } else if(cartAux.listP[index].quantity == 1) { // si había solo un producto
                     cartAux.listP.splice(index,1);
-                    return await this.updateMongo(idCart,cartAux);
+                    await this.updateFirebase(idCart,cartAux);
+                    return { hecho:`producto ${idProducto} eliminado del carrito ${idCart}`};
                 }
             } else { // si el carrito no tenia productos
                 return {Error:`ATENCIÓN: el carrito no tenia productos`};
@@ -133,53 +137,60 @@ class CarritoFirebase extends ContenedorFirebase {
     }
 
     // UPDATE DELETE ALL THE PRODUCTS FROM CART
-    async deleteAllFromCartMongo(idCart){
+    async deleteAllFromCart(idCart){
         let cartToUpdate;
         try {
-            cartToUpdate = await this.readMongo({ourId: idCart});
-            if (cartToUpdate.length == 0) {
-                return {Error: `El carrito ${idCart} no existe`}
+            cartToUpdate = await this.readCart(idCart);
+            if (cartToUpdate.error) {
+                return {error: `El carrito ${idCart} no existe`}
             }
         } catch (error) {
-            return {Error: `Falla en la busqueda: ${error}`}
+            return {error: `Falla en la busqueda: ${error}`}
         }
 
         try {
-            cartToUpdate[0].listP = [];
-            return await this.updateMongo(idCart, cartToUpdate[0])
+            cartToUpdate.listP = [];
+            await this.updateFirebase(idCart, cartToUpdate);
+            return { hecho: `todos los productos fueron borrados del carrito ${idCart}`}
         } catch (error) {
-            return {Error:`Falló la eliminación de todos los productos`}
+            return {error:`Falló la eliminación de todos los productos`}
         }
     }
 
     // DELETE CART
-    async deleteCartMongo(idCart){
+    async deleteCart(idCart){
         try {
-            let retorno = await this.deleteMongo(idCart);
-            if (retorno.deletedCount == 0) {
-                return {Error: `El carrito ${idCart} no existe`};
+            let deleted = await this.deleteFirebase(idCart);
+            if (deleted.error) {
+                return {hecho: `El carrito ${idCart} no existe`};
             } else {
-                return {Hecho: `Carrito ${idCart} eliminado con éxito: ${retorno}`};
+                return {hecho: `Carrito ${idCart} eliminado con éxito`};
             } 
         } catch (error) {
-            return {Error: `Falla al eliminar el carrito: ${error}`};
+            return {error: `Falla al eliminar el carrito: ${error}`};
         }
     }
 }
 
-let changuitoFirebase = new CarritoFirebase(Model,URL);
+let changuitoFirebase = new CarritoFirebase(serviceAccount,'carritos');
 let prueba = {};
 
 // PRUEBA DE MODULO QUE CREA UN CARRITO NUEVO
+//changuitoFirebase.createCartFirebase().then((res) => console.log(res));
 
 //PRUEBA DE MODULO QUE DEVUELVE UN CARRITO
+//changuitoFirebase.readCartFirebase(67).then((res) => console.log(res));
 
 // PRUEBA DE MODULO QUE AÑADE PRODUCTOS A UN CARRITO
+//changuitoFirebase.addToCartFirebase(2,1).then((res) => console.log(res));
 
 // PRUEBA DE MODULO QUE ELIMINA UN PRODUCTO DE UN CARRITO
+//changuitoFirebase.deleteFromCartFirebase(1,1).then((res) => console.log(res));
 
 //PRUEBA DE MODULO QUE ELIMINA TODOS LOS PRODUCTOS DEL CARRITOS
+//changuitoFirebase.deleteAllFromCartFirebase(123).then((res) => console.log(res));
 
 // PREUBA DE MODULO QUE ELIMINA UN CARRITO COMO TAL
+//changuitoFirebase.deleteCartFirebase(6).then((res) => console.log(res));
 
-//module.exports = changuitoFirebase;
+module.exports = changuitoFirebase;

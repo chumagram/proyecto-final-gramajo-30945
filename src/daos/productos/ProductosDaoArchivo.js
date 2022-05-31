@@ -1,78 +1,103 @@
 const path = require('path');
 const Contenedor = require('../../contenedores/ContenedorArchivo.js');
-const fs = require('fs');
-
-function timeStamp(){
-    const date = new Date();
-    return date.toLocaleDateString() + " - " + date.toLocaleTimeString()
-}
 
 class Productos extends Contenedor {
     constructor(dir){
         super(dir);
     }
 
-    createProduct(productToAdd){
-        let rightNow = timeStamp();
-        let productos = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-        let flag = true;
-        productos.forEach(producto=>{
-            if (producto.code == productToAdd.code){
-                producto.stock += productToAdd.stock;
-                flag = false;
-                producto.timeStamp = rightNow;
-                productToAdd.id = producto.id;
-            }
-        });
-        if (flag){
-            this.lastID ++;
-            productToAdd.id = this.lastID;
-            productToAdd.timeStamp = rightNow;
-            productos.push(productToAdd);
-        }
-
+// CREAR UN NUEVO PRODUCTO SI ES QUE YA NO EXISTE, SINO ACTUALIZA EL STOCK
+    async createProduct(productToAdd){
         try {
-            fs.writeFileSync(this.workFile, JSON.stringify(productos, null, 2));
-            console.log(`Exito: añadido a ${this.workFile}`);
-            console.log(`ID asignado: ${productToAdd.id}`);
-            return productToAdd.id;
+            if (productToAdd.name 
+                && productToAdd.price
+                && productToAdd.description
+                && productToAdd.thumbnail
+                && productToAdd.stock
+                && productToAdd.code) {
+                    let param = {code: productToAdd.code};
+                    let alreadyExist = this.readDocument(param);
+                    if (alreadyExist.error) {
+                        let created = this.createDocument(productToAdd);
+                        return { hecho: `Producto con ID ${created.id} creado con éxito`};
+                    } else {
+                        let newStock = productToAdd.stock + alreadyExist.stock;
+                        alreadyExist.stock = newStock;
+                        this.updateDocument(alreadyExist.id, alreadyExist);
+                        return { hecho:`el stock del producto ${alreadyExist.id} fue actualizado`};
+                    }
+                } else {
+                    return {error: `El producto pasado está corrompido`};
+            }
         } catch(error) {
-            console.log('Error: no se pudo guardar el objeto');
-        }
-    }
-    
-    readProduct(id){
-
-    }
-
-    readAllProducts(){
-
-    }
-
-    updateProduct(id,changes){
-        let rightNow = timeStamp();
-        let productos = JSON.parse(fs.readFileSync(this.workFile, 'utf-8'));
-        let indexProduct = productos.findIndex(element => element.id === id);
-        console.log(indexProduct);
-        if (indexProduct == -1){
-            console.log(`El producto con id ${id} no existe`);
-            return { error : 'producto no encontrado' }
-        } else {
-            changes.id = id;
-            changes.timeStamp = rightNow;
-            productos[indexProduct] = changes;
-            fs.writeFileSync(this.workFile, JSON.stringify(productos,null,2));
-            console.log(`Objeto con ID ${id} actualizado correctamente`);
-            return changes;
+            return {error:'falla al crear el producto'};
         }
     }
 
-    deleteProduct(id){
-
+// LEER UN PRODUCTO SEGUN SU ID
+    async readProduct(idToFind){
+        try {
+            let readed = this.readDocument({id: idToFind})
+            if (readed.error) {
+                return {error:`No se encontró ningún producto con id ${idToFind}`}
+            } else {
+                return readed;
+            }
+        } catch (error) {
+            return {error:'Falla al buscar el producto'};
+        }
     }
 
-    deleteAllProducts(){
-        
+// LEER TODOS LOS PRODUCTOS ALMACENADOS
+    async readAllProducts(){
+        let readed = this.readAll();
+        return readed;
+    }
+
+// ACTUALIZAR UN PRODUCTO SEGUN SI ID
+    async updateProduct(id,changes){
+        try {
+            if (changes.name 
+                || changes.price
+                || changes.description
+                || changes.thumbnail
+                || changes.stock
+                || changes.code){
+                    let productToUpdate = this.readProduct(id)
+                    for (let key in changes) {
+                        productToUpdate[key] = changes[key];
+                    }
+                    let updated = this.updateDocument(id,productToUpdate);
+                    return updated;
+                } else {
+                    return {Error: 'No se puede actualizar con los parametros pasados'}
+                }
+        } catch (error) {
+            return { error: 'Falló la actualización del producto'}
+        }
+    }
+
+// ELIMINAR UN PRODUCTO SEGUN SU ID
+    async deleteProduct(id){
+        try {
+            let deleted = this.deleteDocument(id);
+            if (deleted.error) {
+                return { error : 'producto no encontrado' };
+            } else {
+                return { hecho : `El producto con id ${id} fue eliminado` };
+            }
+        } catch (error) {
+            return { error: 'Falló la eliminación del producto'};
+        }
+    }
+
+// ELIMINAR TODOS LOS PRODUCTOS ALMACENADOS
+    async deleteAllProducts(){
+        try {
+            return this.deleteAll();
+        } catch (error) {
+            return { error: 'Falló la eliminación de todos los productos'}
+        }
     }
 }
 
@@ -86,6 +111,15 @@ let productoAux = {
     stock: 10,
     code: 123456987234
 }
+
+let productoCorrompido = {
+    price:120,
+    description:"Tremendo sable laser re fachero, original que lo uso darth vader para exterminar jedis en la orden 66.",
+    thumbnail: "https://as.com/meristation/imagenes/2021/05/05/betech/1620209195_059699_1620209343_sumario_grande.jpg",
+    stock: 10,
+    code: 123456987234
+}
+
 let anotherProduct = {
     name: "Peluche de Grogu",
     price:80,
@@ -96,15 +130,21 @@ let anotherProduct = {
 }
 
 // MODULO QUE CREA UN PRODUCTO
+//console.log(product.createProduct(productoAux));
 
 // MODULO QUE LEE UN PRODUCTO POR ID
+//console.log(product.readProduct(4));
 
 // MODULO QUE LEE TODOS LOS PRODUCTOS
+//console.log(product.readAllProducts());
 
 // MODULO QUE ACTUALIZA UN PRODUCTO SEGUN ID Y CAMBIOS
+//console.log(product.updateProduct(2,{code: 568734776698}));
 
 // MODULO QUE ELIMINA UN PRODUCTO SEGÚN SU ID
+//console.log(product.deleteProduct(2));
 
 // MODULO QUE ELIMINA TODOS LOS PRODUCTOS
+//console.log(product.deleteAllProducts());
 
-//module.exports = product;
+module.exports = product;

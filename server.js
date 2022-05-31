@@ -1,3 +1,10 @@
+// Selección de el tipo de base de dato
+//const dbType = 'mongoDb';
+const dbType = 'firebase';
+//const dbType = 'JSONfiles';
+module.exports = dbType;
+
+// Importaciones
 const express = require('express');
 const productRoutes = require('./src/routes/productRoutes.js');
 const cartRoutes = require('./src/routes/cartRoutes.js');
@@ -35,14 +42,14 @@ app.get('/login',(require,response)=>{
     } else if (login.user == "chuma"){
         response.json({Hecho:"Usted es un usuario", Admin: admin.adminState});
     }
-})
+});
 
 // Fin de sesion como administrador
 app.get('/logout',(require,response)=>{
     admin.adminState = false;
     fs.writeFileSync(directorioJson, JSON.stringify(admin,null,2));
     response.json({Hecho:"Sesión terminada"});
-})
+});
 
 // ERROR 404 - Page Not Found
 function error404 (require, response){
@@ -50,7 +57,7 @@ function error404 (require, response){
     let metodo = require.method;
     let notFound = 404;
     response.status(notFound).send({ERROR: notFound, description: `la ruta ${ruta} con método ${metodo} no tiene ninguna función implementada`});
-}
+};
 app.get('*', function(require, response){
     error404(require, response);
 });

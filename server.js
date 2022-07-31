@@ -1,7 +1,7 @@
 // Selección de el tipo de base de dato
 //const dbType = 'mongoDb';
-const dbType = 'firebase';
-//const dbType = 'JSONfiles';
+//const dbType = 'firebase';
+const dbType = 'JSONfiles'; 
 module.exports = dbType;
 
 // Importaciones
@@ -10,9 +10,9 @@ const productRoutes = require('./src/routes/productRoutes.js');
 const cartRoutes = require('./src/routes/cartRoutes.js');
 const fs = require('fs');
 const path = require('path');
+
 const app = express();
 const PORT = 8080;
-
 let directorioJson = path.join(__dirname,'/src/data/usuarios.json');
 let admin = JSON.parse(fs.readFileSync(directorioJson, 'utf-8'));
 

@@ -1,5 +1,5 @@
 const ContenedorMongo = require('../../contenedores/ContenedorMongoDb.js');
-const Model = require('../../models/productoModel.js');
+const Model = require('../../mongo/productoModel.js');
 const URL = 'mongodb+srv://chumagram:test1234@cluster0.ar5vn.mongodb.net/store-wars?retryWrites=true&w=majority';
 
 class ProductosMongo extends ContenedorMongo {

@@ -1,23 +1,17 @@
-const path = require('path');
-const Contenedor = require('../../contenedores/ContenedorArchivo.js');
-const product = require('../productos/ProductosDaoArchivo.js');
-
-function timeStamp(){
-    const date = new Date();
-    return date.toLocaleDateString() + " - " + date.toLocaleTimeString()
-}
+const Contenedor = require('../../contenedores/ContenedorSQLite');
+const SqLiteOptions = require('../../data/dbSql/config.js');
 
 class Carrito extends Contenedor {
-    constructor(dir){
-        super(dir);
+    constructor(options, tableName){
+        super(options, tableName);
     }
 
-    //CREATE NEW CART
+    // CREATE NEW CART
     async createCart(){
         try {
             let cartToAdd = {};
-            let created = this.createDocument(cartToAdd);
-            return created.id;
+            let created = await this.createSQL(cartToAdd);
+            return { hecho: `carrito con id ${created} creado con éxito`};
         } catch (error) { 
             return { error: `ERROR al crear el carrito: ${error}`};
         }
@@ -25,23 +19,23 @@ class Carrito extends Contenedor {
 
     // READ CART
     async readCart(idCarrito){
-        let cartAux = this.readDocument({id: idCarrito});
+        let cartAux = await this.readSQL({id: idCarrito});
         if (cartAux.id){
             return cartAux;
         } else if (cartAux.error){
-            return {Error: "carrito no encontrado"};
+            return { error: "carrito no encontrado"};
         }
     }
 
-    // UPDATE ADD TO CART
+    //! UPDATE ADD TO CART
     async addToCart(idProducto,idCart){
-        let productToAdd = await product.readProduct(idProducto);
+        let productToAdd = await product.readSQL({id: idProducto});
         let cartList, flagCarrito = true, auxList = [];
         // TRAE TODOS LOS CARRITOS
         try {
             cartList = this.readAll();
         } catch(error) {
-            return {Error:`ERROR al listar los carritos: ${error}`};
+            return { error:`Falló la lectura de los carritos: ${error}`};
         }
         // RECORREMOS LA LISTA DE CARRITOS
         let cartUpdated;
@@ -53,7 +47,6 @@ class Carrito extends Contenedor {
                 auxList.forEach(producto => {
                     if (producto.id == productToAdd.id) {
                         producto.quantity+=1;
-                        carrito.timeStamp = timeStamp();
                         flag = false;
                     }
                 });
@@ -66,7 +59,6 @@ class Carrito extends Contenedor {
                         delete productToAdd.timeStamp
                     }
                     auxList.push(productToAdd);
-                    carrito.timeStamp = timeStamp();
                 }
 
                 cartUpdated = Object.assign(carrito, { listaP: auxList });
@@ -77,18 +69,22 @@ class Carrito extends Contenedor {
         if (productToAdd.error){
             return productToAdd.error
         }else if (flagCarrito){
-            return {error:`Carrito ${idCart} no encontrado`}
+            return { error:`Carrito ${idCart} no encontrado`}
         } else {
             try {
-                let aux = this.updateDocument(idCart,cartUpdated);
-                return { hecho: `Producto añadido al carrito ${idCart} exitosamente`}
+                let updated =  await this.updateSQL({id: idCart},cartUpdated);
+                if (updated.error) {
+                    return { error:`Falla al actualizar el producto en el carrito: ${error}`}
+                } else {
+                    return { hecho: `Producto añadido al carrito ${idCart} exitosamente`}
+                }
             } catch(error) {
-                return { error:`Falla al añadir el producto al carrito`}
+                return { error:`Falla al añadir el producto al carrito: ${error}`}
             }
         }
     }
 
-    // UPDATE DELETE PRODUCT FROM CART
+    //! UPDATE DELETE PRODUCT FROM CART
     async deleteFromCart(idProducto, idCart){
         let cartList = this.readAll();
         let flagProduct = true;
@@ -129,7 +125,7 @@ class Carrito extends Contenedor {
         }
     }
 
-    // UPDATE DELETE ALL THE PRODUCTS FROM CART
+    //! UPDATE DELETE ALL THE PRODUCTS FROM CART
     async deleteAllFromCart(idCart){
         let cartList = this.readAll();
         let flag = true;
@@ -154,7 +150,7 @@ class Carrito extends Contenedor {
         }
     }
 
-    // DELETE CART
+    //! DELETE CART
     async deleteCart(idCart){
         try {
             let retorno = this.deleteDocument(idCart);
@@ -165,24 +161,24 @@ class Carrito extends Contenedor {
     }
 }
 
-let changuito = new Carrito(path.join(__dirname,"../../data/jsonDb/carrito.json"));
+let changuito = new Carrito(SqLiteOptions,'carritos');
 
 // PRUEBA DE MODULO QUE CREA UN CARRITO NUEVO
-//changuito.createCart();
+//changuito.createCart().then((res) => console.log(res));
 
 //RPUEBA DE MODULO QUE MUESTRA TODOS LOS PRODUCTOS EN UN CARRITOS
-//console.log(changuito.readCart(4));
+//changuito.readCart(1).then((res) => console.log(res));;
 
 // PRUEBA DE MODULO QUE AÑADE PRODUCTOS A UN CARRITO
-//console.log(changuito.addToCart(3,4)); //{idProducto: 3, idCart: 4}
+//changuito.addToCart(3,4).then((res) => console.log(res));
 
 // PRUEBA DE MODULO QUE ELIMINA UN PRODUCTO DE UN CARRITO
-//console.log(changuito.deleteFromCart(1,1));
+//changuito.deleteFromCart(1,1).then((res) => console.log(res));
 
 //PRUEBA DE MODULO QUE ELIMINA TODOS LOS PRODUCTOS DEL CARRITOS
-//console.log(changuito.deleteAllFromCart(3));
+//changuito.deleteAllFromCart(3).then((res) => console.log(res));
 
 // PREUBA DE MODULO QUE ELIMINA UN CARRITO COMO TAL
-//console.log(changuito.deleteCart(4));
+//changuito.deleteCart(4).then((res) => console.log(res));
 
 module.exports = changuito;

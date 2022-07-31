@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-/* const model = require('../models/containerModel.js');
+/* const model = require('../mongo/containerModel.js');
 const URL = 'mongodb+srv://chumagram:test1234@cluster0.ar5vn.mongodb.net/container?retryWrites=true&w=majority'; */
 
 class ContenedorMongo {

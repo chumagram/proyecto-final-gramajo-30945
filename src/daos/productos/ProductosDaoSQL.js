@@ -1,12 +1,12 @@
-const path = require('path');
-const Contenedor = require('../../contenedores/ContenedorArchivo.js');
+const Contenedor = require('../../contenedores/ContenedorSQLite');
+const SqLiteOptions = require('../../data/dbSql/config.js');
 
-class Productos extends Contenedor {
-    constructor(dir){
-        super(dir);
+class ProductosSQL extends Contenedor {
+    constructor(options, tableName){
+        super(options, tableName);
     }
 
-// CREAR UN NUEVO PRODUCTO SI ES QUE YA NO EXISTE, SINO ACTUALIZA EL STOCK
+    //CREAR UN NUEVO PRODUCTO SI ES QUE YA NO EXISTE, SINO ACTUALIZA EL STOCK
     async createProduct(productToAdd){
         try {
             if (productToAdd.name 
@@ -15,29 +15,33 @@ class Productos extends Contenedor {
                 && productToAdd.thumbnail
                 && productToAdd.stock
                 && productToAdd.code) {
-                    let param = {code: productToAdd.code};
-                    let alreadyExist = this.readDocument(param);
-                    if (alreadyExist.error) {
-                        let created = this.createDocument(productToAdd);
-                        return { hecho: `Producto con ID ${created.id} creado con éxito`};
+                let param = {code: productToAdd.code};
+                let alreadyExist = await this.readSQL(param);
+                if (alreadyExist == null) {
+                    let created = await this.createSQL(productToAdd);
+                    if (created.error) {
+                        return created.error
                     } else {
-                        let newStock = productToAdd.stock + alreadyExist.stock;
-                        alreadyExist.stock = newStock;
-                        this.updateDocument(alreadyExist.id, alreadyExist);
-                        return { hecho:`el stock del producto ${alreadyExist.id} fue actualizado`};
+                        return { hecho: `Producto con ID ${created} creado con éxito`};
                     }
                 } else {
-                    return {error: `El producto pasado está corrompido`};
+                    let newStock = productToAdd.stock + alreadyExist.stock;
+                    alreadyExist.stock = newStock;
+                    await this.updateSQL({id: alreadyExist.id}, alreadyExist);
+                    return { hecho:`el stock del producto ${alreadyExist.id} fue actualizado`};
+                }
+            } else {
+                return {error: `El producto pasado está corrompido`};
             }
         } catch(error) {
-            return {error:'falla al crear el producto'};
+            return {error: `Falla al crear el producto: ${error}`};
         }
     }
 
-// LEER UN PRODUCTO SEGUN SU ID
+    //LEER UN PRODUCTO SEGUN SU ID
     async readProduct(idToFind){
         try {
-            let readed = this.readDocument({id: idToFind})
+            let readed = await this.readSQL({id: idToFind})
             if (readed.error) {
                 return {error:`No se encontró ningún producto con id ${idToFind}`}
             } else {
@@ -48,13 +52,13 @@ class Productos extends Contenedor {
         }
     }
 
-// LEER TODOS LOS PRODUCTOS ALMACENADOS
+    //LEER TODOS LOS PRODUCTOS ALMACENADOS
     async readAllProducts(){
-        let readed = this.readAll();
+        let readed = await this.readAllSQL();
         return readed;
     }
 
-// ACTUALIZAR UN PRODUCTO SEGUN SI ID
+    //ACTUALIZAR UN PRODUCTO SEGUN SI ID
     async updateProduct(id,changes){
         try {
             if (changes.name 
@@ -63,24 +67,24 @@ class Productos extends Contenedor {
                 || changes.thumbnail
                 || changes.stock
                 || changes.code){
-                    let productToUpdate = this.readProduct(id)
+                    let productToUpdate = await this.readSQL({id: id})
                     for (let key in changes) {
                         productToUpdate[key] = changes[key];
                     }
-                    let updated = this.updateDocument(id,productToUpdate);
-                    return updated;
+                    let updated = await this.updateSQL({id: id}, productToUpdate);
+                    return { hecho: `el producto con id ${updated} fue actualizado`};
                 } else {
-                    return {Error: 'No se puede actualizar con los parametros pasados'}
+                    return { error: 'No se puede actualizar con los parametros pasados'}
                 }
         } catch (error) {
             return { error: 'Falló la actualización del producto'}
         }
     }
 
-// ELIMINAR UN PRODUCTO SEGUN SU ID
+    //ELIMINAR UN PRODUCTO SEGUN SU ID
     async deleteProduct(id){
         try {
-            let deleted = this.deleteDocument(id);
+            let deleted = await this.deleteSQL(id);
             if (deleted.error) {
                 return { error : 'producto no encontrado' };
             } else {
@@ -91,17 +95,18 @@ class Productos extends Contenedor {
         }
     }
 
-// ELIMINAR TODOS LOS PRODUCTOS ALMACENADOS
+    //ELIMINAR TODOS LOS PRODUCTOS ALMACENADOS
     async deleteAllProducts(){
         try {
-            return this.deleteAll();
+            await this.deleteAllSQL();
+            return { hecho: 'toda la lista de productos fue eliminada'}
         } catch (error) {
             return { error: 'Falló la eliminación de todos los productos'}
         }
     }
 }
 
-let product = new Productos(path.join(__dirname,"../../data/jsonDb/productos.json"));
+let product = new ProductosSQL(SqLiteOptions, 'productos');
 
 let productoAux = {
     name: "Sable laser",
@@ -130,21 +135,21 @@ let anotherProduct = {
 }
 
 // MODULO QUE CREA UN PRODUCTO
-//console.log(product.createProduct(productoAux));
+//product.createProduct(anotherProduct).then((res) => console.log(res));
 
 // MODULO QUE LEE UN PRODUCTO POR ID
-//console.log(product.readProduct(4));
+//product.readProduct(2).then((res) => console.log(res));
 
 // MODULO QUE LEE TODOS LOS PRODUCTOS
-//console.log(product.readAllProducts());
+//product.readAllProducts().then((res) => console.log(res));
 
 // MODULO QUE ACTUALIZA UN PRODUCTO SEGUN ID Y CAMBIOS
-//console.log(product.updateProduct(2,{code: 568734776698}));
+//product.updateProduct(1,{stock:10,code:111122223333}).then((res) => console.log(res));
 
 // MODULO QUE ELIMINA UN PRODUCTO SEGÚN SU ID
-//console.log(product.deleteProduct(2));
+//product.deleteProduct(1).then((res) => console.log(res));
 
 // MODULO QUE ELIMINA TODOS LOS PRODUCTOS
-//console.log(product.deleteAllProducts());
+//product.deleteAllProducts().then((res) => console.log(res));
 
 module.exports = product;

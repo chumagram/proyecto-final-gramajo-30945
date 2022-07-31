@@ -1,5 +1,5 @@
 const ContenedorMongo = require('../../contenedores/ContenedorMongoDb.js');
-const Model = require('../../models/carritoModel.js');
+const Model = require('../../mongo/carritoModel.js');
 const URL = 'mongodb+srv://chumagram:test1234@cluster0.ar5vn.mongodb.net/store-wars?retryWrites=true&w=majority';
 const product = require('../productos/ProductosDaoMongoDb.js');
 

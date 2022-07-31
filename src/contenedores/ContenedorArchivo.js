@@ -29,7 +29,6 @@ class Contenedor {
         this.lastID = Math.max(...idAux);
         if(this.lastID === -Infinity){
             this.lastID = 0;
-            console.log(this.workFile,' está vacío.');
         }
     }
     
@@ -136,7 +135,7 @@ class Contenedor {
 
 }
 
-//let container = new Contenedor('../data/container.json');
+//let container = new Contenedor(__dirname,'../data/jsonDb/container.json');
 
 let prueba = {
     title: "esto es una prueba"

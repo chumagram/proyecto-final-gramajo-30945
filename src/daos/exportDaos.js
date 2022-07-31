@@ -12,8 +12,4 @@ if (dbType == 'mongoDb') {
     const productos = require('./productos/ProductosDaoArchivo');
     const carritos = require('./carritos/CarritosDaoArchivo');
     module.exports = {productos,carritos};
-} else {
-    const productos = { error: 'falló la selección de la base de datos' };
-    const carritos = { error: 'falló la selección de la base de datos' };
-    module.exports = {productos,carritos};
 }

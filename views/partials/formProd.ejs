@@ -1,0 +1,83 @@
+<h2 id="tittleHerr">Herramientas para productos</h2>
+
+<div id="divBotonesHerr">
+    <input onclick="showAddProd(this)" type="button" value="AGREGAR PRODUCTO" id="agregarProd" class="botonHerramienta">
+    <input onclick="showUpdProd(this)" type="button" value="ACTUALIZAR PRODUCTO" id="actualizarProd" class="botonHerramienta">
+    <input onclick="showDelProd(this)" type="button" value="ELIMINAR PRODUCTOS" id="eliminarProd" class="botonHerramienta">    
+</div>
+
+<form id="formProductAdd">
+    <h3>Agregar producto</h3>
+    <div class="formHerr">
+
+        <label for="title">Nombre</label>
+        <input type="text" name="title" id="title" required><br>
+
+        <label for="price">Precio</label>
+        <input type="number" name="price" id="price" required><br>
+
+        <label for="price">Descripción</label>
+        <input type="text" name="description" id="description" required><br>
+
+        <label for="thumbnail">Thumbnail</label>
+        <input type="text" name="thumbnail" id="thumbnail" required><br>
+
+        <label for="stock">Stock</label>
+        <input type="number" name="stock" id="stock" required><br>
+
+        <label for="code">Código</label>
+        <input type="number" name="code" id="code" required><br>
+
+        <input onclick="addProduct(this)" type="button" value="AGREGAR" id="botonAgregar">
+    </div>
+</form>
+
+<form id="formProductUpdate">
+    <h3>Actualizar producto</h3>
+    <div class="formHerr">
+        <label for="title">Nombre </label>
+        <input type="text" name="title" id="title" required><br>
+
+        <label for="price">Precio </label>
+        <input type="number" name="price" id="price" required><br>
+
+        <label for="price">Descripción </label>
+        <input type="text" name="description" id="description" required><br>
+
+        <label for="thumbnail">Thumbnail </label>
+        <input type="text" name="thumbnail" id="thumbnail" required><br>
+
+        <label for="stock">Stock </label>
+        <input type="number" name="stock" id="stock" required><br>
+
+        <label for="code">Código </label>
+        <input type="number" name="code" id="code" required><br>
+
+        <input onclick="addProduct(this)" type="button" value="ACTUALIZAR" id="agregar">
+    </div>
+</form>
+
+<form id="formProductDelete">
+    <h3>Eliminar productos</h3>
+    <div class="formHerr">
+        <label for="title">Nombre </label>
+        <input type="text" name="title" id="title" required><br>
+
+        <label for="price">Precio </label>
+        <input type="number" name="price" id="price" required><br>
+
+        <label for="price">Descripción </label>
+        <input type="text" name="description" id="description" required><br>
+
+        <label for="thumbnail">Thumbnail </label>
+        <input type="text" name="thumbnail" id="thumbnail" required><br>
+
+        <label for="stock">Stock </label>
+        <input type="number" name="stock" id="stock" required><br>
+
+        <label for="code">Código </label>
+        <input type="number" name="code" id="code" required><br>
+
+        <input onclick="addProduct(this)" type="button" value="ELIMINAR" id="agregar">
+    </div>
+</form>

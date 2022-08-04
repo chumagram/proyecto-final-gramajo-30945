@@ -1,0 +1,141 @@
+
+/************* TODO EL DOCUMENTO *************/
+html{
+    min-height: 100%;
+    position: relative;
+    background-image:linear-gradient(rgba(20, 0, 0, 0.685),rgb(0, 0, 0)),url(../images/background.webp);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+body{
+    background-image:linear-gradient(rgba(20, 0, 0, 0.685),rgb(0, 0, 0)),url(../images/background.webp);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    color: rgb(255, 255, 255);
+    font-family: Arial;
+    margin: 0;
+}
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    line-height: 1.4;
+    font-size: small;
+    text-align: center;
+}
+hr {
+    background-color: rgb(255, 255, 255);
+    width: 99,9%;
+    height: 0px;
+}
+input{
+    font-size: 15px;
+}
+.avisos {
+    margin: 0 auto;
+    width: 20%;
+    padding: 30px;
+    background-color: rgb(125, 104, 0);
+}
+#tittleImg{
+    display: block;
+    margin: 0px auto;
+    width: 20%;
+}
+
+/***************** REGISTRARSE *****************/
+#formRegistrarse{
+    text-align: center;
+    position: fixed;
+    top: 21%;
+    left: 30%;
+    width: 40%;
+    background-color: rgba(9, 9, 9, 0.318);
+    border: 1px solid rgb(226, 90, 0);
+}
+#formRegistrarse *{
+    margin: 5px;
+    border: 0px;
+}
+#tableSignUp{
+    width: 100%;
+}
+#tituloRegistrarse{
+    padding-top: 25px;
+    padding-bottom: 0px;
+    color: rgb(179, 81, 0)
+}
+#boton3{
+    background-color:rgb(116, 0, 0);
+    border-radius:10px;
+    border:1px solid rgb(50, 50, 50);
+    display: inline;
+    position: relative;
+    right: -240px;
+}
+.casilla {
+    padding-top: 9px;
+    padding-bottom: 1px;
+    border-radius: 4px;
+    width: 80%;
+    text-align: center;
+}
+#phone{
+    width:85%;
+    text-align: left;
+}
+#botonSingup{
+    padding: 10px;
+    background-color: rgb(42, 60, 0);
+    display: inline;
+    border-radius: 4px;
+    cursor: pointer;
+}
+#botonOcultarRegister{
+    padding: 10px;
+    padding-right: 20px;
+    padding-left: 20px;
+    background-color:rgb(84, 0, 0);
+    margin-left: 5%;
+    display: inline;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/***************** CARGAR IMAGEN ****************/
+#uploadForm{
+    position: relative;
+}
+#buttonCargarImg{
+    border-radius: 4px;
+    padding: 10px;
+    background-color: rgb(39, 46, 23);
+    cursor: pointer;
+}
+
+/******************* ERRORES ******************/
+#atenuarErr{
+    z-index: 9;
+    display: none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    background-color: rgba(65, 0, 0, 0.751);
+}
+#errRegister{
+    padding: 20px;
+    display: none;
+    z-index: 10;
+    position: fixed;
+    top: 30%;
+    left: 27%;
+    width: 50%;
+    background-color: rgba(0, 0, 0, 0.936);
+    margin: 0 auto;
+    border: 1px solid rgb(198, 0, 0);
+}

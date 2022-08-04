@@ -1,0 +1,4 @@
+[2022-08-01T16:40:06.791] [ERROR] errorCategory - Error: ValidationError: phone: Path `phone` (543886851166) is more than maximum allowed value (10).
+[2022-08-01T16:40:06.794] [ERROR] errorCategory - Error: TypeError: Cannot read properties of undefined (reading 'id')
+[2022-08-01T16:42:46.014] [ERROR] errorCategory - Error: ValidationError: phone: Path `phone` (543886851166) is more than maximum allowed value (15).
+[2022-08-01T16:42:46.019] [ERROR] errorCategory - Error: TypeError: Cannot read properties of undefined (reading 'id')

@@ -1,4 +1,3 @@
-const {carritos} = require('../daos/exportDaos');
 const express = require('express');
 const {Router} = express;
 const cartRoute = Router();

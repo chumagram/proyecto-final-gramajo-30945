@@ -1,6 +1,4 @@
-const {productos} = require('../daos/exportDaos');
 const express = require('express');
-const fs = require('fs');
 const path = require('path');
 
 let directorioJson = path.join(__dirname,"../data/usuarios.json");

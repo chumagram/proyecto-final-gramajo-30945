@@ -1,0 +1,27 @@
+<div id="contenedorFormsSesion">
+
+    <div id="formInicioS">
+        <h2 id="tittleInitSession">Inicio de sesión</h2>
+        <form method="post" action="/login">
+            <br>
+            <label for="username">Email</label>
+            <input type="text" name="username" id="username" required class="casilla">
+            <br>
+            <label for="password">Contraseña</label>
+            <input type="password" name="password" id="passwordL" required class="casilla">
+            <br><br>
+            <input type="submit" value="Iniciar sesión" id="botonInitSession">
+        </form>
+        <input onclick="toCreateUser(this)" type="button" value="Registrarse" id="boton2">
+        <br><br>
+    </div>
+
+    <div id="errInitSession">
+        <input onclick="ocultarErrSession(this)" type="button" value="X" id="botonOcultarErrSession">
+        <h2>ERROR: usuario incorrecto</h2>
+        <br>
+        <p>Ingrese el mail correctamente o regístrese... es gratis!</p>
+        <br>
+    </div>
+
+</div>

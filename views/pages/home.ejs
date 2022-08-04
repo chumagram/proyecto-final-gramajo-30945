@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8">
+        <title>STORE WARS</title>
+        <link rel="stylesheet" href="/css/styleHome.css" />
+        <link rel="icon" href="/images/favicon.ico"/>
+    </head>
+<body class="container">
+    <div id="atenuarErr"></div>
+    <header>
+        <br>
+        <img src="/images/tittle.webp" id="tittleImg">
+
+        <div id="logout">
+            <input onclick="logout(this)" type="button" id="botonLogout" value="Cerrar sesión">
+        </div>
+        
+        <div id="toCart">
+            <input onclick="showCart(this)" type="button" id="botonShowCart" value="Ver Carrito">
+        </div>
+
+        <div id="hechoInitSession">
+            <h3>Usted a iniciado sesión</h3>
+            <p id="saludos"></p>
+        </div>
+        
+        <div id="closeSession">
+            <h3>Usted ha cerrado sesión</h3>
+            <p id="despedida"></p>
+        </div>
+
+        <hr>
+    </header>
+    <main>
+        <%- include('../partials/formProd'); %>
+        <br>
+        <hr>
+        <%- include('../partials/tableProd'); %>
+        <br>
+    </main>
+    <%- include('../partials/footer'); %>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/normalizr@3.6.1/dist/normalizr.browser.min.js"></script>
+    <script src="scripts/homeAdmin.js"></script>
+</body>
+</html>

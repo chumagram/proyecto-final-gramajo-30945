@@ -1,4 +1,6 @@
 const myLogs = require('../utils/logsGenerator');
+const usersMongo = require('../mongo/daos/UsuariosDaoMongo');
+const communication = require('../utils/communication');
 
 function error404 (require, response){
     let ruta = require.path;
@@ -32,7 +34,9 @@ function getFailLogin (req, res){
 function postSignup (req, res){
     myLogs.showInfo(req.path, req.method)
     if (req.isAuthenticated()) {
-        res.cookie('alias', req.body.alias).redirect('/register/addAvatar');
+        res.cookie('email', req.user.id).cookie('alias', req.body.alias).redirect('/register/addAvatar');
+    } else {
+        myLogs.showError('Falló la authenticación')
     }
 }
 
@@ -51,14 +55,34 @@ function postAddAvatar (req, res){
     res.render('pages/end-signup');
 }
 
-function uploadAvatar (req, res, next) {
+function getCart (req, res) {
+    myLogs.showInfo(req.path, req.method);
+    res.render('pages/cart');
+}
+
+async function uploadAvatar (req, res, next, transporter, client) {
+    
+    // verificación de file
     const file = req.file;
     if(!file) {
         const error = new Error('please upload a file');
         error.httpStatusCode = 400;
+        myLogs.showError(error);
         return next(error);
     }
+
+    // para la comunicación con apis nodemailer y twilio
+    let user = await usersMongo.readUser(req.user.id);
+    communication.welcomeMail(transporter, user); // enviar mail al usuario
+    communication.newUserMail(transporter, user); // enviar mail al administrador
+    communication.newUserWhatsApp(client, user); // enviar WhatsApp al administrador
+
     res.redirect('/home');
+}
+
+function getProfile (req, res) {
+    myLogs.showInfo(req.path, req.method);
+    res.render('pages/myProfile');
 }
 
 module.exports = {
@@ -72,4 +96,6 @@ module.exports = {
     getRegister,
     postAddAvatar,
     uploadAvatar,
+    getCart,
+    getProfile
 }

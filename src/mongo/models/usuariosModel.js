@@ -8,9 +8,10 @@ const UsuariosSchema = new mongoose.Schema ({
     name: {type: String, require: true, max: 20},
     lastname: {type: String, require: true, max: 20},
     age: {type: Number, require: true, max: 100},
-    phone: {type: Number, require: true, min: 100000000000, max: 999999999999},
+    phone: {type: Number, require: true},
     address: {type: String, require: true, max:100},
-    alias: {type: String, require: true}
+    alias: {type: String, require: true},
+    cartId: {type: Number, require: true}
 },{versionKey: false, timestamps: true});
 
 module.exports = mongoose.model(usuariosCollection, UsuariosSchema);

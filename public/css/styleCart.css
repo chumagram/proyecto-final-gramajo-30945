@@ -1,5 +1,5 @@
 
-/*******************  TODO EL DOCUMENTO  *******************/
+/* * * * * * * * * *  TODO EL DOCUMENTO  * * * * * * * * */
 
 html{
     min-height: 100%;
@@ -38,13 +38,11 @@ hr {
 }
 
 /*********************  HEADER  *********************/
-
 #tittleImg{
     display: block;
     margin: 0px auto;
     width: 17%;
 }
-
 #botonLogout{
     color: white;
     border-radius: 4px;
@@ -57,8 +55,7 @@ hr {
 #botonLogout:active {
     transform: scale(0.98);
 }
-
-#botonShowCart{
+#botonShowHome{
     color: white;
     border-radius: 4px;
     font-size: 16px;
@@ -67,24 +64,10 @@ hr {
     cursor: pointer;
     border: 0px;
 }
-#botonShowCart:active {
+#botonShowHome:active {
     transform: scale(0.98);
 }
-
-#botonShowProfile{
-    color: white;
-    border-radius: 4px;
-    font-size: 16px;
-    background-color: rgb(0, 57, 36);
-    padding: 10px 20px;
-    cursor: pointer;
-    border: 0px;
-}
-#botonShowProfile:active {
-    transform: scale(0.98);
-}
-
-#logout, #toCart, #toProfile {
+#logout, #toHome {
     display: inline;
     position: absolute;
     top: 45px;
@@ -92,106 +75,28 @@ hr {
 #logout {
     right: 20px;
 }
-#toCart {
+#toHome {
     right: 160px;
 }
-#toProfile {
-    left: 20px;
-}
 
-/***************  HERRAMIENTAS ADMIN  ***************/
-#tittleHerr{
-    text-align: center;
-}
-.botonHerramienta{
-    padding: 10px;
-    background-color: rgb(125, 104, 0);
-    color: white;
-    border: 0px;
-    border-radius: 6px;
-    cursor: pointer;
-}
-.botonHerramienta:active {
-    transform: scale(0.98);
-}
-
-#divBotonesHerr{
-    text-align: center;
-    letter-spacing: 10px;
-}
-#formProductAdd, #formProductUpdate, #formProductDelete{
-    text-align: center;
-    padding-bottom: 20px;
-    border: 1px solid rgb(152, 79, 0);
-    background-color: rgba(0, 0, 0, 0.545);
-    width: 37%;
-    height: 400px;
-    margin-left: 31.5%;
-    margin-top: 10px;
-}
-#formProductAdd{
-    display: block;
-}
-#formProductUpdate, #formProductDelete{
-    display: none;
-}
-#formProductAdd input, #formProductUpdate input, #formProductDelete input{
-    background-color: rgb(33, 33, 33);
-    margin-top: 10px;
-    color: white;
-    padding: 4px;
-    border: 0px;
-    border-radius:5px;
-}
-#divErrAddProduct{
-    padding: 20px;
-    display: none;
-    z-index: 12;
-    position: fixed;
-    top: 30%;
-    left: 27%;
-    width: 50%;
-    background-color: rgba(31, 0, 0, 0.936);
-    margin: 0 auto;
-    border: 1px solid rgb(200, 0, 0);
-    border-radius: 20px; 
-}
-#ErrAddProduct{
-    text-align: center;
-}
-#divAvisosHerr{
-    display: none;
-    position: fixed;
-    left: 40px;
-    top: 150px;
-    width: 20%;
-    padding-top: 10px;
-    padding-bottom: 10px;
-    background-color: rgb(19, 19, 19);
-    border: 1px solid rgb(205, 198, 0);
-    border-radius: 10px;
-}
-#AvisosHerr{
-    text-align: center;
-}
-/***************  TABLA DE PRODUCTOS  ***************/
-#tittleTableProd{
+/***************  TABLA DE CARRITO  ***************/
+#tittleTableCart{
     text-align: center;
     font-size: 30px;
 }
-#tablaProduct{
+#tableCart{
     text-align: center;
     width: 80%;
     margin-left: auto;
     margin-right: auto;
     border-collapse: collapse;
 }
-#tablaProduct th {
+#tableCart th {
     border: 1px solid rgb(200, 100, 0);
     background-color: rgb(81, 41, 0);
     height: 30px;
 }
-#tablaProduct td {
+#tableCart td {
     border: 1px solid rgb(200, 100, 0);
     background-color: rgba(0, 0, 0, 0.7);
 }
@@ -199,18 +104,18 @@ hr {
     height: 40%;
     width: 180px;
 }
-
-.botonAddToCart{
-    background-color: rgb(0, 66, 36);
+.botonDelToCart{
     color: white;
-    padding: 10px 8px 10px 4px;
-    border-radius: 5px;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: rgb(110, 0, 0);
+    padding: 8px 8px;
     cursor: pointer;
+    border: 0px;
 }
-.botonAddToCart:active {
+.botonDelToCart:active {
     transform: scale(0.98);
 }
-
 .columnDescription{
     text-align: left;
     word-wrap: break-word;
@@ -218,8 +123,21 @@ hr {
     padding-left: 15px;
     padding-right: 10px;
 }
-.columnOurId{
-    min-width: 30px;
+#divButtonFinishShop{
+    text-align: center;
+}
+#buttonFinishShop{
+    text-align: center;
+    background-color: rgb(0, 66, 36);
+    color: white;
+    font-size: 18px;
+    padding: 10px 18px 10px 15px;
+    border-radius: 5px;
+    border: 0px;
+    cursor: pointer;
+}
+#buttonFinishShop:active {
+    transform: scale(0.98);
 }
 
 /* * * * * * * CERRAR SESIÓN * * * * * */
@@ -251,22 +169,6 @@ hr {
     text-align: center;
 }
 
-/*********** INICIO DE SESION *********/
-#hechoInitSession{
-    padding: 5px;
-    display: none;
-    z-index: 10;
-    position: fixed;
-    top: 1%;
-    left: 1%;
-    width: 15%;
-    background-color: rgba(0, 52, 23, 0.936);
-    border-radius: 5px;
-}
-#hechoInitSession *{
-    text-align: center;
-}
-
 /************ CERRAR SESIÓN ***********/
 
 #atenuarErr{
@@ -293,5 +195,21 @@ hr {
     border-radius: 20px;
 }
 #NoSession *{
+    text-align: center;
+}
+/* * * * * * * POSTER de avisos de funcionalidades * * * * * * */
+#divAvisosHerr{
+    display: none;
+    position: fixed;
+    left: 30px;
+    top: 70px;
+    width: 20%;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    background-color: rgb(19, 19, 19);
+    border: 1px solid rgb(205, 198, 0);
+    border-radius: 10px;
+}
+#AvisosHerr{
     text-align: center;
 }

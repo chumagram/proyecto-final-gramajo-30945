@@ -35,10 +35,12 @@ class UsuariosMongo extends ContenedorMongo {
                     id: readed[0].id,
                     password: readed[0].password,
                     name: readed[0].name,
+                    lastname: readed[0].lastname,
                     age: readed[0].age,
+                    phone: readed[0].phone,
+                    address: readed[0].address,
                     alias: readed[0].alias,
-                    avatar: readed[0].avatar,
-                    session: readed[0].session
+                    cartId: readed[0].cartId
                 }
                 return foundUser;
             }
@@ -48,9 +50,9 @@ class UsuariosMongo extends ContenedorMongo {
         }
     }
 
-    async updateUser(email,changes){
+    async updateUser(email, changes){
         try {
-            await this.updateMongo(email,changes);
+            let updated = await this.updateMongo(email, changes);
             return {hecho: `Usuario actualizado con éxito`}
         } catch (error) {
             myLogs.showError (error);

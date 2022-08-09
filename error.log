@@ -2,3 +2,24 @@
 [2022-08-01T16:40:06.794] [ERROR] errorCategory - Error: TypeError: Cannot read properties of undefined (reading 'id')
 [2022-08-01T16:42:46.014] [ERROR] errorCategory - Error: ValidationError: phone: Path `phone` (543886851166) is more than maximum allowed value (15).
 [2022-08-01T16:42:46.019] [ERROR] errorCategory - Error: TypeError: Cannot read properties of undefined (reading 'id')
+[2022-08-04T12:17:39.329] [ERROR] errorCategory - Error: ValidationError: phone: Path `phone` (77123456) is less than minimum allowed value (100000000000).
+[2022-08-04T12:17:39.331] [ERROR] errorCategory - Error: TypeError: Cannot read properties of undefined (reading 'id')
+[2022-08-04T14:03:09.113] [ERROR] errorCategory - Error: ValidationError: age: Path `age` (123) is more than maximum allowed value (100).
+[2022-08-04T14:03:09.114] [ERROR] errorCategory - Error: TypeError: Cannot read properties of undefined (reading 'id')
+[2022-08-04T14:06:17.744] [ERROR] errorCategory - Error: ValidationError: phone: Path `phone` (3886851166) is less than minimum allowed value (100000000000).
+[2022-08-04T14:06:17.745] [ERROR] errorCategory - Error: TypeError: Cannot read properties of undefined (reading 'id')
+[2022-08-05T10:14:56.578] [ERROR] errorCategory - Error: ReferenceError: user is not defined
+[2022-08-05T13:45:46.296] [ERROR] errorCategory - Error: Error: No recipients defined
+[2022-08-05T13:48:01.822] [ERROR] errorCategory - Error: Error: No recipients defined
+[2022-08-05T15:42:30.956] [ERROR] errorCategory - Error: ReferenceError: req is not defined
+[2022-08-05T15:42:31.493] [ERROR] errorCategory - Error: ReferenceError: req is not defined
+[2022-08-07T00:11:59.875] [ERROR] errorCategory - Error: CastError: Cast to Number failed for value "NaN" (type number) at path "ourId" for model "carritos"
+[2022-08-07T00:13:51.467] [ERROR] errorCategory - Error: CastError: Cast to Number failed for value "NaN" (type number) at path "ourId" for model "carritos"
+[2022-08-07T08:41:50.847] [ERROR] errorCategory - Error: CastError: Cast to Number failed for value "NaN" (type number) at path "ourId" for model "carritos"
+[2022-08-07T08:46:39.829] [ERROR] errorCategory - Error: CastError: Cast to Number failed for value "NaN" (type number) at path "ourId" for model "carritos"
+[2022-08-08T21:22:49.954] [ERROR] errorCategory - Error: Error: queryTxt ETIMEOUT cluster0.ar5vn.mongodb.net
+[2022-08-08T21:22:52.225] [ERROR] errorCategory - Error: Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.ar5vn.mongodb.net
+[2022-08-08T21:40:53.297] [ERROR] errorCategory - Error: Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.ar5vn.mongodb.net
+[2022-08-08T21:40:53.883] [ERROR] errorCategory - Error: Error: queryTxt ETIMEOUT cluster0.ar5vn.mongodb.net
+[2022-08-08T21:46:05.819] [ERROR] errorCategory - Error: Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.ar5vn.mongodb.net
+[2022-08-08T21:50:15.148] [ERROR] errorCategory - Error: Error: querySrv ETIMEOUT _mongodb._tcp.cluster0.ar5vn.mongodb.net

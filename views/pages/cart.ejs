@@ -2,8 +2,8 @@
 <html lang="es">
     <head>
         <meta charset="UTF-8">
-        <title>STORE WARS - Home</title>
-        <link rel="stylesheet" href="/css/styleHome.css" />
+        <title>STORE WARS - Carrito</title>
+        <link rel="stylesheet" href="/css/styleCart.css" />
         <link rel="icon" href="/images/favicon.ico"/>
     </head>
 <body class="container">
@@ -15,17 +15,8 @@
             <input onclick="logout(this)" type="button" id="botonLogout" value="Cerrar sesión">
         </div>
         
-        <div id="toCart">
-            <input onclick="showCart(this)" type="button" id="botonShowCart" value="Ver Carrito">
-        </div>
-
-        <div id="toProfile">
-            <input onclick="showProfile(this)" type="button" id="botonShowProfile" value="Mi perfil">
-        </div>
-
-        <div id="hechoInitSession">
-            <h3>Usted a iniciado sesión</h3>
-            <p>Bienvenido <b id="saludos"></b></p>
+        <div id="toHome">
+            <input onclick="showProducts(this)" type="button" id="botonShowHome" value="Volver a home">
         </div>
         
         <div id="closeSession">
@@ -42,11 +33,12 @@
         <hr>
     </header>
     <main>
-        <%- include('../partials/formProd'); %>
+        <%- include('../partials/tableCart'); %>
         <br>
-        <hr>
-        <%- include('../partials/tableProd'); %>
-        <br><br><br>
+        <div id="divButtonFinishShop">
+            <input onclick="finishShop(this)" type="button" id="buttonFinishShop" value="Finalizar compra">
+        </div>
+        <br><br>
     </main>
     <%- include('../partials/footer'); %>
     <script src="/socket.io/socket.io.js"></script>

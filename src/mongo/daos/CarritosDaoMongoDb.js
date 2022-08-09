@@ -1,7 +1,7 @@
-const ContenedorMongo = require('../contenedores/ContenedorMongoDb.js');
-const Model = require('../mongo/carritoModel.js');
+const ContenedorMongo = require('../container/ContenedorMongoDb.js');
+const Model = require('../models/carritoModel.js');
 const URL = process.env.MONGODB_URI;
-const product = require('./productos/ProductosDaoMongoDb.js');
+const product = require('./ProductosDaoMongoDb.js');
 const myLogs = require('../../utils/logsGenerator');
 
 class CarritoMongo extends ContenedorMongo {
@@ -48,12 +48,12 @@ class CarritoMongo extends ContenedorMongo {
             productToAdd = await product.readMongo({ourId: idProducto});
             cartToUpdate = await this.readMongo({ourId: idCart});
             if (productToAdd.length == 0) {
-                myLogs.showError (`carrito no encontrado`);
-                return {error: `producto no encontrado`}
+                myLogs.showError (`Carrito no encontrado`);
+                return {error: `Producto no encontrado`}
             }
             if (cartToUpdate.length == 0){
-                myLogs.showError (`carrito no encontrado`);
-                return {error: `carrito no encontrado`}
+                myLogs.showError (`Carrito no encontrado`);
+                return {error: `Carrito no encontrado`}
             }
         } catch(error) {
             myLogs.showError (error);
@@ -82,16 +82,16 @@ class CarritoMongo extends ContenedorMongo {
                 });
                 if (flag){ // ya estaba el producto en el carrito
                     await this.updateMongo(idCart,cartAux);
-                    return {hecho:`cantidad de producto incremetada en 1`};
+                    return {hecho:`Cantidad de producto incremetada en 1`};
                 } else { // no estaba el producto en el carrito
                     cartAux.listP.push(productUpdated);
                     await this.updateMongo(idCart,cartAux);
-                    return {hecho:`producto añadido al carrito`};
+                    return {hecho:`Producto añadido al carrito`};
                 }
             } else { // si el carrito no tenia productos
                 cartAux.listP = [productUpdated];
                 await this.updateMongo(idCart,cartAux);
-                return {hecho:`producto añadido al carrito`}; 
+                return {hecho:`Producto añadido al carrito`}; 
             }
         } catch (error) {
             myLogs.showError (error);
@@ -101,7 +101,7 @@ class CarritoMongo extends ContenedorMongo {
 
     // UPDATE DELETE PRODUCT FROM CART
     async deleteFromCart(idProducto, idCart){
-        // verificaciones ce producto y carrito pasados como parametro
+        // verificaciones de producto y carrito pasados como parametro
         let productToDelete;
         let cartToUpdate;
         try {
@@ -146,17 +146,57 @@ class CarritoMongo extends ContenedorMongo {
         }
     }
 
+    // UPDATE DELETE PRODUCT FROM CART
+    async deleteFromCartWithCode(codeToDelete, idCart){
+        let cartToUpdate;
+        try {
+            cartToUpdate = await this.readMongo({ourId: idCart});
+            if (cartToUpdate.length == 0){
+                return {error: `Carrito no encontrado`}
+            }
+        } catch(error) {
+            myLogs.showError (error);
+            return {error:`Falla de búsqueda: ${error}`};
+        }
+
+        // actualizaciones del carrito
+        let cartAux = cartToUpdate[0];
+        try {
+            if (cartAux.listP) { // si el carrito ya tenia productos
+                let index = cartAux.listP.findIndex((element) => {
+                    if (codeToDelete == element.code) return true;
+                });
+                if ((index == -1)) { // el producto existe pero no en el carrito
+                    return {error:`ATENCIÓN: el producto no se encontró en el carrito`};
+                } else if (cartAux.listP[index].quantity > 1) { // mas de un producto
+                    cartAux.listP[index].quantity--;
+                    await this.updateMongo(idCart,cartAux);
+                    return { hecho: `La cantidad del producto fue mermada en 1`}
+                } else if(cartAux.listP[index].quantity == 1) { // si había solo un producto
+                    cartAux.listP.splice(index,1);
+                    await this.updateMongo(idCart,cartAux);
+                    return { hecho: `El producto fue eliminado del carrito ${idCart}`}
+                }
+            } else { // si el carrito no tenia productos
+                return {error:`ATENCIÓN: el carrito no tenia productos`};
+            }
+        } catch (error) {
+            myLogs.showError (error);
+            return {error:`ATENCIÓN: falla de actualización: ${error}`};
+        }
+    }
+
     // UPDATE DELETE ALL THE PRODUCTS FROM CART
     async deleteAllFromCart(idCart){
         let cartToUpdate;
         try {
             cartToUpdate = await this.readMongo({ourId: idCart});
             if (cartToUpdate.length == 0) {
-                return {Error: `El carrito ${idCart} no existe`}
+                return {notFound: `El carrito ${idCart} no existe`}
             }
         } catch (error) {
             myLogs.showError (error);
-            return {Error: `Falla en la busqueda: ${error}`}
+            return {error: `Falla en la busqueda: ${error}`}
         }
 
         try {
@@ -164,7 +204,7 @@ class CarritoMongo extends ContenedorMongo {
             return await this.updateMongo(idCart, cartToUpdate[0])
         } catch (error) {
             myLogs.showError (error);
-            return {Error:`Falló la eliminación de todos los productos`}
+            return {error:`Falló la eliminación de todos los productos`}
         }
     }
 
@@ -173,13 +213,13 @@ class CarritoMongo extends ContenedorMongo {
         try {
             let retorno = await this.deleteMongo(idCart);
             if (retorno.deletedCount == 0) {
-                return {Error: `El carrito ${idCart} no existe`};
+                return {notFound: `El carrito ${idCart} no existe`};
             } else {
-                return {Hecho: `Carrito ${idCart} eliminado con éxito`};
+                return {hecho: `Carrito ${idCart} eliminado con éxito`};
             } 
         } catch (error) {
             myLogs.showError (error);
-            return {Error: `Falla al eliminar el carrito: ${error}`};
+            return {error: `Falla al eliminar el carrito: ${error}`};
         }
     }
 }

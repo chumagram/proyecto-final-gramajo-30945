@@ -29,8 +29,14 @@ function showError (errorToShow){
     logger.error(`Error: ${errorToShow}`);
 }
 
+function logInfoAviso (avisoToLog){
+    const logger = log4js.getLogger('infoCategory');
+    logger.info(avisoToLog);
+}
+
 module.exports = {
     showInfo,
     showWarning,
-    showError
+    showError,
+    logInfoAviso
 }

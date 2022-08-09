@@ -20,7 +20,7 @@ class ProductosMongo extends ContenedorMongo {
                 let id = doc[0].ourId;
                 productToAdd.stock = doc[0].stock + productToAdd.stock;
                 await this.updateMongo(id,productToAdd);
-                return { hecho:`el stock del producto ${id} fue actualizado`};
+                return { update:`El stock del producto ${id} fue actualizado`};
             }
         } catch (error) {
             return { error: `Falla al agregar el Producto: ${error}` }
@@ -56,7 +56,7 @@ class ProductosMongo extends ContenedorMongo {
         try {
             let updated = await this.updateMongo(idProduct,changes);
             if (updated.modifiedCount == 0) {
-                return { error: `No se encontró el producto con id ${idProduct}`};
+                return { notFound: `No se encontró el producto con id ${idProduct}`};
             } else {
                 return { hecho: `el producto con id ${idProduct} fue actualizado`};
             }
@@ -70,7 +70,7 @@ class ProductosMongo extends ContenedorMongo {
         try {
             let deleted = await this.deleteMongo(id);
             if (deleted.deletedCount == 0) {
-                return { error: `No se encontró el producto con id ${id}`};
+                return { notFound: `No se encontró el producto con id ${id}`};
             } else {
                 return { hecho: `El producto con id ${id} fue eliminado`};
             }

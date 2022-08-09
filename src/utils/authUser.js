@@ -7,6 +7,7 @@ const {createHash} = require('./hashGenerator')
 const usersMongo = require('../mongo/daos/UsuariosDaoMongo')
 
 function authUser(){
+    
     // Registrar la ruta login en passport
     passport.use('login', new LocalStrategy(
         async (username, password, callback) => {
@@ -35,9 +36,10 @@ function authUser(){
                 name: req.body.name,
                 lastname: req.body.lastname,
                 age: req.body.age,
+                phone: req.body.phone,
                 alias: req.body.alias,
                 address: req.body.address,
-                phone: req.body.phone
+                cartId: 0
             }
             let userStatus = await usersMongo.addUser(newUser);
 
@@ -48,6 +50,8 @@ function authUser(){
             }
         }
     ))
+
+    
 
     // passport necesita serializar...
     passport.serializeUser((user, callback) => {

@@ -2,7 +2,7 @@
     {
       "name": "Sable laser",
       "price":120,
-      "description":"Tremendo sable laser re fachero, original que lo uso darth vader para exterminar jedis en la orden 66.",
+      "description":"Sable laser de darth vader con el que exterminó jedis.",
       "thumbnail": "https://as.com/meristation/imagenes/2021/05/05/betech/1620209195_059699_1620209343_sumario_grande.jpg",
       "stock": 109,
       "code": 111122223333
@@ -35,7 +35,7 @@
       "name": "Halcón Milenario",
       "price":500,
       "description":"La nave más icónica de todo Star Wars, perteneciente al mismísimo Han Solo",
-      "thumbnail": "https://static.wikia.nocookie.net/esstarwars/images/5/52/Millennium_Falcon_Fathead_TROS.png/revision/latest?cb=20191220220841",
+      "thumbnail": "https://static.wikia.nocookie.net/esstarwars/images/1/1c/Falcon_NEGVV.jpg/revision/latest/scale-to-width-down/1975?cb=20090727212201",
       "stock": 5,
       "code": 555566667777
     },

@@ -1,0 +1,57 @@
+/************* TODO EL DOCUMENTO *************/
+html{
+    min-height: 100%;
+    position: relative;
+    background-image:linear-gradient(rgba(20, 0, 0, 0.685),rgb(0, 0, 0)),url(../images/background.webp);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+}
+body{
+    background-image:linear-gradient(rgba(20, 0, 0, 0.685),rgb(0, 0, 0)),url(../images/background.webp);
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: 100% 100%;
+    color: rgb(255, 255, 255);
+    font-family: Arial;
+    margin: 0;
+}
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    line-height: 1.4;
+    font-size: small;
+    text-align: center;
+}
+hr {
+    background-color: rgb(255, 255, 255);
+    width: 99,9%;
+    height: 0px;
+}
+input{
+    font-size: 15px;
+}
+.avisos {
+    margin: 0 auto;
+    width: 20%;
+    padding: 30px;
+    background-color: rgb(125, 104, 0);
+}
+#tittleImg{
+    display: block;
+    margin: 0px auto;
+    width: 20%;
+}
+
+#tittleProfile{
+    text-align: center;
+}
+#divImgAvatar{
+    text-align: center;
+}
+#avatarImg{
+    border: 4px solid rgb(200, 100, 0);
+    width: 20%;
+}

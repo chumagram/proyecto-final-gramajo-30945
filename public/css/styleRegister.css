@@ -68,20 +68,14 @@ input{
     padding-bottom: 0px;
     color: rgb(179, 81, 0)
 }
-#boton3{
-    background-color:rgb(116, 0, 0);
-    border-radius:10px;
-    border:1px solid rgb(50, 50, 50);
-    display: inline;
-    position: relative;
-    right: -240px;
-}
 .casilla {
     padding-top: 9px;
     padding-bottom: 1px;
     border-radius: 4px;
     width: 80%;
     text-align: center;
+    color: white;
+    background-color: rgb(44, 44, 44);
 }
 #phone{
     width:85%;
@@ -93,6 +87,7 @@ input{
     display: inline;
     border-radius: 4px;
     cursor: pointer;
+    color: white;
 }
 #botonOcultarRegister{
     padding: 10px;
@@ -103,6 +98,7 @@ input{
     display: inline;
     border-radius: 4px;
     cursor: pointer;
+    color: white;
 }
 
 /***************** CARGAR IMAGEN ****************/
@@ -111,8 +107,11 @@ input{
 }
 #buttonCargarImg{
     border-radius: 4px;
-    padding: 10px;
-    background-color: rgb(39, 46, 23);
+    padding: 12px;
+    padding-right: 20px;
+    padding-left: 20px;
+    background-color: rgb(34, 48, 0);
+    color: white;
     cursor: pointer;
 }
 

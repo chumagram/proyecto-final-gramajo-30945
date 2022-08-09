@@ -80,14 +80,12 @@ class ContenedorMongo {
 
     //UPDATE
     async updateMongo(idFind, change){
-        if (typeof idFind == 'number'){
-            try {
-                let updated = await this.model.updateOne({ourId: idFind},{$set: change});
-                return updated;
-            } catch (error) {
-                myLogs.showError (error);
-                return error;
-            }
+        try {
+            let updated = await this.model.updateOne({ourId: idFind},{$set: change});
+            return updated;
+        } catch (error) {
+            myLogs.showError (error);
+            return error;
         }
     }
 

@@ -3,8 +3,8 @@ const log4js = require('log4js'); //* para almancenar logs
 log4js.configure({ //* Configuración de log4js
     appenders: {
         miLoggerConsole: { type: 'console' },
-        miLoggerFile: { type: 'file', filename: 'warn.log' },
-        miLoggerFile2: { type: 'file', filename: 'error.log' }
+        miLoggerFile: { type: 'file', filename: './logs/warn.log' },
+        miLoggerFile2: { type: 'file', filename: './logs/error.log' }
     }, 
     categories: {
         default: { appenders: ["miLoggerConsole"], level: "trace" },

@@ -46,6 +46,7 @@ No se implementará Frontend, salvo en las situaciones donde sea necesario para 
 - Nodemailer
 
 ### Descripciones específicas
+
 **INICIO** -> al requerir la ruta '/':
 - Se muestra un menú de ingreso al sistema con email y password así como también la posibilidad de registro de un nuevo usuario.
 - El menú de registro consta del nombre completo del cliente, número telefónico, email y campo de password duplicado para verificar coincidencia.
@@ -54,7 +55,9 @@ No se implementará Frontend, salvo en las situaciones donde sea necesario para 
 - La ruta </productos/:categoria> devuelve los productos por la categoría requerida.
 - Los ítems pueden ser agregados al carrito de compras y listados a través de la ruta </carrito>.
 - Se puede modificar y borrar por su id a través de la ruta </carrito:id>.
+
 **FLOW** -> Se puede solicitar un producto específico con la ruta </productos/:id>, donde id es el id del item generado por MongoDB y devuelve la descripción del producto ( foto, precio, selector de cantidad). Si se ingresa a </productos/:id> y el producto no existe en MongoDB, se respinde con un mensaje adecuado que indica algo relacionado a que el producto no existe.
+
 **MONGODB** -> se implementaron las siguientes colecciones:
 - *usuarios:* clientes registrados
 - *productos:* catálogo completo
@@ -78,6 +81,9 @@ No se implementará Frontend, salvo en las situaciones donde sea necesario para 
   * Fecha y hora
   * estado ( por defecto en ‘generada’)
   * Email de quién realizó la orden
+
 **ENVIO DE MAILS** -> Finalizada la orden, se envia un mail a la dirección de la cuenta con los detalles de la orden.
+
 **ARCHIVO DE CONFIGURACIÓN** -> Se dispone de un archivo de configuración externo con opciones para desarrollo y otras para producción, que son visualizadas a través de la vista </config>. Como parámetros de configuración esta el puerto de escucha del servidor, la url de la base de datos, el mail que recibirá notificaciones del backend, tiempo de expiración de sesión y los que sea necesario incluir.
-**CANAL DE CHAT** -> Se cuenta con un canal de chat general donde el usuario enviará los mensajes en la ruta </chat> y en </chat/:email> puede ver sólo los suyos. Se utiliza la colección mensajes en MongoDB. La tecnología de comunicación es Websockets. El servidor implementa una vista, utilizando ejs, para visualizar todos los mensajes y poder responder individualmente a ellos, eligiendo el email de respuesta.
+
+**CANAL DE CHAT** -> Se cuenta con un canal de chat general donde el usuario enviará los mensajes en la ruta `/chat` y en `/chat/:email` puede ver sólo los suyos. Se utiliza la colección mensajes en MongoDB. La tecnología de comunicación es Websockets. El servidor implementa una vista, utilizando ejs, para visualizar todos los mensajes y poder responder individualmente a ellos, eligiendo el email de respuesta.

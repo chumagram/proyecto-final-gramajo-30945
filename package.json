@@ -1,11 +1,11 @@
 {
   "name": "proyecto-final-gramajo-30945",
-  "version": "1.0.0",
+  "version": "4.1.0",
   "description": "proyecto final del alumno Gonzalo Leonel Gramajo para el curso de Backend de Coder House",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js --NODE_ENV='development'"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>STORE WARS (chat)</title>
+  <link rel="stylesheet" href="/css/chat.css" />
+  <link rel="icon" href="/images/favicon.ico"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+</head>
+<body>
+  <div id="contenedor-chat">
+    <%- include('../partials/header'); %>
+    <%- include('../partials/mensajes'); %>
+  </div>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="scripts/chat.js"></script>
+</body>
+</html>

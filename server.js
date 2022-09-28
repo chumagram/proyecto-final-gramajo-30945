@@ -1,165 +1,129 @@
-
-//* * * * * * * * * * * * Importaciones * * * * * * * * * * * * * *
-
+//* Importaciones de módulos
 const express = require('express');
 const path = require('path');
-const dotenv = require('dotenv').config() // para variables de entorno
-
-// Rutas y herramientas
-const productRoutes = require('./src/routes/productRoutes.js');
-const cartRoutes = require('./src/routes/cartRoutes.js');
-const serverRoutes = require ('./src/routes/serverRoutes');
-const upload = require('./src/utils/storageImg');
-
-// Inicio de sesión
-const MongoStore = require('connect-mongo')
-const session = require('express-session')
+const compression = require('compression');
 const passport = require('passport')
-
-// Socket
+const session = require('express-session')
 const { Server: HttpServer } = require('http')
 const { Server: IOServer } = require('socket.io')
-const {socketHome} = require('./src/routes/socketHome')
-const {socketCart} = require('./src/routes/socketCart')
 
-// Api's de comunicación
-const nodemailer = require('nodemailer')
-const accountSid = process.env.SID_TWILIO; 
-const authToken = process.env.AUTH_TOKEN_TWILIO; 
-const client = require('twilio')(accountSid, authToken)
+//* Importaciones de archivos
+const RouterProductos = require('./src/route/productos')
+const RouterMensajes = require('./src/route/mensajes')
+const RouterCarritos = require('./src/route/carritos')
+const RouterUsuarios = require('./src/route/usuarios')
+const RouterOrdenes = require('./src/route/ordenes')
 
-// para modo CLUSTER
-const cluster = require('cluster')
-const numCPUs = require('os').cpus().length
-const myLogs = require('./src/utils/logsGenerator');
+const ControllerInicio = require('./src/controller/inicio')
+const {error404} = require ('./src/controller/errores')
+const {initServer} = require('./src/service/initServer')
+const configSession = require('./src/config/session')
 
-
-//* * * * * * * * * * *   Configuraciones   * * * * * * * * * * * * *
-
+//* Middlewares
 const app = express();
-const PORT = process.env.PORT || 8080;
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(compression());
 
-// Configurar EJS - Embedded JavaScript templating
+//* Configurar EJS
 const publicPath = path.resolve(__dirname, "./public");
 app.use(express.static(publicPath));
 app.set('view engine', 'ejs');
 
-// Configurar Sessions
-const {authUser} = require('./src/utils/authUser')
-const advancedOptions = {useNewUrlParser: true, useUnifiedTopology: true}
-app.use(session({
-    store: MongoStore.create({ 
-        mongoUrl: process.env.MONGODB_URI,
-        mongoOptions: advancedOptions
-    }),
-    secret: 'chumagram',
-    cookie: {
-        maxAge: parseInt(process.env.SESSION_TIME),
-        httpOnly: false,
-        secure: false
-    },
-    //rolling: true, 
-    resave: false, 
-    saveUninitialized: false
-}))
+//* Inicializar controladores
+const inicio = new ControllerInicio()
 
-// Middleware de passport
+//* Configurar session
+app.use(session(configSession));
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Configurar Socket
+//* Configurar http server apra socket io
 const httpServer = new HttpServer(app); 
 const io = new IOServer(httpServer);
 
-// Configurar Nodemailer - Objeto transportador
-const transporter = nodemailer.createTransport({
-    //host: 'smtp.ethereal.email',
-    service: 'gmail',
-    port: 587,
-    secure: false,
-    auth: {
-        user: process.env.GMAIL_MAIL,
-        pass: process.env.GMAIL_PASS
-    },
-    tls: {
-        rejectUnauthorized: false
+//* Inicializar rutas
+const routerProductos = new RouterProductos()
+const routerMensajes = new RouterMensajes()
+const routerCarritos = new RouterCarritos()
+const routerUsuarios = new RouterUsuarios()
+const routerOrdenes = new RouterOrdenes()
+
+const LocalStrategy = require('passport-local').Strategy
+const {validatePass} = require('./src/utils/passValidator')
+const {createHash} = require('./src/utils/hashGenerator')
+const ServiceUsuarios = require('./src/service/usuarios')
+const serviceUsuarios = new ServiceUsuarios ()
+
+passport.use('login', new LocalStrategy (
+  async (username, password, callback) => {
+    let user = await serviceUsuarios.obtenerUsuario(username)
+    if(user.error) {
+      return callback(user.error) // fallo de búsqueda
+    } else if (user.notFound){
+      return callback(null, false) // no se encontró usuario
+    } else {
+      if(!validatePass(user, password)){
+        return callback(null, false) // password incorrecto
+      } else {
+        return callback(null, user) // devuelve el usuario
+      }
     }
-});
-
-
-//* * * * * * * * * * * * *    Rutas    * * * * * * * * * * * * *
-
-// Definimos la ruta que va a ser cada variable route:
-app.use('/api/producto', productRoutes);
-app.use('/api/carrito', cartRoutes);
-
-// Funciones de autenticación del usuario
-authUser();
-
-// Login
-app.post('/login', passport.authenticate('login', { failureRedirect: '/faillogin' }), serverRoutes.postLogin)
-app.get('/faillogin', serverRoutes.getFailLogin)
-
-// Raíz
-app.get('/', serverRoutes.getRoot);
-
-// Página principal
-app.get('/home', serverRoutes.getMain);
-
-// Página para carrito
-app.get('/cart', serverRoutes.getCart);
-
-// Signup
-app.post('/signup', passport.authenticate('signup', { failureRedirect: '/failsignup' }), serverRoutes.postSignup);
-app.get('/failsignup', serverRoutes.getFailSignup);
-// Cargar formulario para que el usuario se registre
-app.get('/register', serverRoutes.getRegister);
-// Añadir avatar del usuario
-app.get('/register/addAvatar', serverRoutes.postAddAvatar);
-// Guardar avatar del usuario y enviar mails y mensajes
-app.post('/uploadfile', upload.single('avatar'), (req, res, next) => {
-    serverRoutes.uploadAvatar(req, res, next, transporter, client);
-});
-
-// Página para perfil
-app.get('/myProfile', serverRoutes.getProfile);
-
-// Socket
-io.on('connection', socket => {
-    socketHome (socket, io)
-    socketCart (socket, io, transporter, client)
-});
-
-// Error 404 - Page Not Found
-app.get('*', serverRoutes.error404);
-
-//* * * * * * * *  Levantar el servidor según variable de entorno  * * * * * * * *
-
-if( process.env.MODE == 'CLUSTER' ){
-
-    if(cluster.isPrimary) { // isPrimary | isMaster
-        myLogs.logInfoAviso(`Primary PID ${process.pid}`);
-        for (let index = 0; index < numCPUs; index++){
-            cluster.fork(PORT);
-        }
-        cluster.on('online', worker =>{
-            myLogs.logInfoAviso(`Worker PID ${worker.process.pid} online`);
-        })
-        cluster.on('exit', worker => {
-            myLogs.logInfoAviso(`Worker PID ${worker.process.pid} died`);
-        })
+  }
+));
+  
+passport.use('signup', new LocalStrategy(
+    {passReqToCallback: true}, async (req, username, password, callback) => {
+      const newUser = {
+        email: username,
+      password: createHash(password),
+      name: req.body.name,
+      lastname: req.body.lastname,
+      age: req.body.age,
+      alias: req.body.alias,
+      address: req.body.address,
+      cartId: 0
+    }
+    let userStatus = await serviceUsuarios.guardarUsuarios(newUser);
     
-    } else { // entra al else cuando es un worker
-        httpServer.listen(PORT, () => {
-            myLogs.logInfoAviso("Server HTTP escuchando en el puerto " + httpServer.address().port);
-        });
-    } 
+    if (userStatus.found){
+      return callback(null, false)
+    } else {
+      return callback(null, newUser)
+    }
+  }
+))
+  
+passport.serializeUser((user, callback) => {
+  callback(null, user.email) // se pasa email porque es único en la DB
+})
 
-} else {
+passport.deserializeUser(async (email, callback) => {
+  let user = await serviceUsuarios.obtenerUsuario(email);
+  callback (null, user)
+})
 
-    httpServer.listen(PORT, () => {
-        myLogs.logInfoAviso("Server HTTP escuchando en el puerto " + httpServer.address().port)
-    });
-}
+//* Ruters
+app.use('/productos', routerProductos.start())
+app.use('/chat', routerMensajes.start())
+app.use('/carritos', routerCarritos.start())
+app.use('/usuarios', routerUsuarios.start())
+app.use('/ordenes', routerOrdenes.start())
+
+//* Websocket
+io.on('connection', socket => routerMensajes.socketChat(socket, io));
+
+//* Ruta raíz
+app.get('/', inicio.getRoot);
+
+//* Ruta para registrarse
+app.get('/registrarse', inicio.getRegister);
+
+//* Ruta para ver configuraciones
+app.get('/config', inicio.getConfig);
+
+//* Iniciar servidor
+initServer(httpServer);
+
+//* Rutas no contempladas
+app.get('*', error404);

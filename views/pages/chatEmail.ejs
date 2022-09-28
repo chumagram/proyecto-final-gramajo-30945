@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>STORE WARS (chat)</title>
+  <link rel="stylesheet" href="/css/chat.css" />
+  <link rel="icon" href="/images/favicon.ico"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/css/intlTelInput.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.8/js/intlTelInput.min.js"></script>
+</head>
+<body>
+  <div id="contenedor-chat">
+    <%- include('../partials/header'); %>
+    <%- include('../partials/mensajesFiltrados'); %>
+  </div>
+  <script> 
+    let data = JSON.parse('<%-msjsAuthor%>')
+    const html = data.map((element) => {
+    const timeStamp = new Date(element.createdAt).toISOString();
+    const fecha = timeStamp.substring(0, 10);
+    const hora = timeStamp.substring(11,16);
+    return(`
+        <div class=cadaMensaje>
+          <p class='author'>${element.author}</p>
+          <p class='text'>${element.text}</p>
+          <p class='time'>${fecha} ${hora}</p>
+        </div>
+      `)
+    }).join(" ");
+    document.getElementById('messages').innerHTML = html;
+    document.getElementById('message').value = '';
+  </script>
+</body>
+</html>

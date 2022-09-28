@@ -1,82 +1,82 @@
 [
-    {
-      "name": "Sable laser",
-      "price":120,
-      "description":"Sable laser de darth vader con el que exterminó jedis.",
-      "thumbnail": "https://as.com/meristation/imagenes/2021/05/05/betech/1620209195_059699_1620209343_sumario_grande.jpg",
-      "stock": 109,
-      "code": 111122223333
-    },
-    {
-      "name": "Peluche de Grogu",
-      "price":80,
-      "description":"La cosa mas tierna que veras en tu vida y de toda la galaxia basicamente.",
-      "thumbnail": "https://m.media-amazon.com/images/I/81-ustlVcwL._AC_SX569_.jpg",
-      "stock": 40,
-      "code": 222233334444
-    },
-    {
-      "name": "Casco de Darth Vader",
-      "price":50,
-      "description":"Casco de darth vader que uso en la mismísima batalla de Mandalord, fue testigo la mera destruccion del mismo. Pobre Mandalord",
-      "thumbnail": "https://m.media-amazon.com/images/I/71TSNMmfWuL._AC_SL1321_.jpg",
-      "stock": 786,
-      "code": 333344445555
-    },
-    {
-      "name": "X-wing",
-      "price":234,
-      "description":"La nave mas fachera que existe, es analogo a tener un Buggati, pero interestelar, sisi, interestelar, porque tiene un hiperpropulsor re fachero.",
-      "thumbnail": "https://m.media-amazon.com/images/I/610wKANTT5L._AC_SL1500_.jpg",
-      "stock": 324,
-      "code": 444455556666
-    },
-    {
-      "name": "Halcón Milenario",
-      "price":500,
-      "description":"La nave más icónica de todo Star Wars, perteneciente al mismísimo Han Solo",
-      "thumbnail": "https://static.wikia.nocookie.net/esstarwars/images/1/1c/Falcon_NEGVV.jpg/revision/latest/scale-to-width-down/1975?cb=20090727212201",
-      "stock": 5,
-      "code": 555566667777
-    },
-    {
-      "name": "T-Fighter Advanced",
-      "price":400,
-      "description":"Nave interestelar usada por la élite imperial en el universo de Star Wars",
-      "thumbnail": "https://static.turbosquid.com/Preview/2016/08/10__07_54_25/Star_Wars_Tie_Fighter_Advanced0001.jpgEE9FE1D8-9437-4D61-9E36-E503664A6867Large-1.jpg",
-      "stock": 9,
-      "code": 666677778888
-    },
-    {
-      "name": "Casco Din Djarin",
-      "price":350,
-      "description":"Casco del famoso Mandaloriano Din Djarin, protector de Grogu en el universo de Star Wars",
-      "thumbnail": "https://cnnespanol.cnn.com/wp-content/uploads/2021/07/casco-the-mandalorian.png",
-      "stock": 30,
-      "code": 777788889999
-    },
-    {
-      "name": "Blaster F-11D",
-      "price":289,
-      "description":"Arma que dispara rayos de plasma, usada por los stormtrupers en el universo de Star Wars",
-      "thumbnail": "https://static.turbosquid.com/Preview/2019/01/30__19_39_23/BlasterFrontRight34.png0A4FB9A4-3035-4E83-909C-CA269926579ADefault.jpg",
-      "stock": 20,
-      "code": 888899990000
-    },
-    {
-      "name": "Sable doble - Lámpara",
-      "price":190,
-      "description":"Sable laser doble usado por Darth Moul en el universo de Star Wars",
-      "thumbnail": "https://geekalia.com/wp-content/uploads/2012/02/luz-nocturna-sable-laser-darth-maul.jpg",
-      "stock": 60,
-      "code": 999900001111
-    },
-    {
-      "name": "Traje de Anakin Skywalker",
-      "price":300,
-      "description":"Traje de Anakin Skywalker usado en su madurex Jedi, previo a convertirse en Darth Vader",
-      "thumbnail": "https://i.etsystatic.com/11823141/r/il/d50cfd/1792409199/il_fullxfull.1792409199_kavm.jpg",
-      "stock": 500,
-      "code": 101010101010
-    }
+  {
+    "name": "Sable laser",
+    "price":120,
+    "description":"Sable laser de darth vader con el que exterminó jedis.",
+    "thumbnail": "https://as.com/meristation/imagenes/2021/05/05/betech/1620209195_059699_1620209343_sumario_grande.jpg",
+    "stock": 109,
+    "code": 111122223333
+  },
+  {
+    "name": "Peluche de Grogu",
+    "price":80,
+    "description":"La cosa mas tierna que veras en tu vida y de toda la galaxia basicamente.",
+    "thumbnail": "https://m.media-amazon.com/images/I/81-ustlVcwL._AC_SX569_.jpg",
+    "stock": 40,
+    "code": 222233334444
+  },
+  {
+    "name": "Casco de Darth Vader",
+    "price":50,
+    "description":"Casco de darth vader que uso en la mismísima batalla de Mandalord, fue testigo la mera destruccion del mismo. Pobre Mandalord",
+    "thumbnail": "https://m.media-amazon.com/images/I/71TSNMmfWuL._AC_SL1321_.jpg",
+    "stock": 786,
+    "code": 333344445555
+  },
+  {
+    "name": "X-wing",
+    "price":234,
+    "description":"La nave mas fachera que existe, es analogo a tener un Buggati, pero interestelar, sisi, interestelar, porque tiene un hiperpropulsor re fachero.",
+    "thumbnail": "https://m.media-amazon.com/images/I/610wKANTT5L._AC_SL1500_.jpg",
+    "stock": 324,
+    "code": 444455556666
+  },
+  {
+    "name": "Halcón Milenario",
+    "price":500,
+    "description":"La nave más icónica de todo Star Wars, perteneciente al mismísimo Han Solo",
+    "thumbnail": "https://static.wikia.nocookie.net/esstarwars/images/1/1c/Falcon_NEGVV.jpg/revision/latest/scale-to-width-down/1975?cb=20090727212201",
+    "stock": 5,
+    "code": 555566667777
+  },
+  {
+    "name": "T-Fighter Advanced",
+    "price":400,
+    "description":"Nave interestelar usada por la élite imperial en el universo de Star Wars",
+    "thumbnail": "https://static.turbosquid.com/Preview/2016/08/10__07_54_25/Star_Wars_Tie_Fighter_Advanced0001.jpgEE9FE1D8-9437-4D61-9E36-E503664A6867Large-1.jpg",
+    "stock": 9,
+    "code": 666677778888
+  },
+  {
+    "name": "Casco Din Djarin",
+    "price":350,
+    "description":"Casco del famoso Mandaloriano Din Djarin, protector de Grogu en el universo de Star Wars",
+    "thumbnail": "https://cnnespanol.cnn.com/wp-content/uploads/2021/07/casco-the-mandalorian.png",
+    "stock": 30,
+    "code": 777788889999
+  },
+  {
+    "name": "Blaster F-11D",
+    "price":289,
+    "description":"Arma que dispara rayos de plasma, usada por los stormtrupers en el universo de Star Wars",
+    "thumbnail": "https://static.turbosquid.com/Preview/2019/01/30__19_39_23/BlasterFrontRight34.png0A4FB9A4-3035-4E83-909C-CA269926579ADefault.jpg",
+    "stock": 20,
+    "code": 888899990000
+  },
+  {
+    "name": "Sable doble - Lámpara",
+    "price":190,
+    "description":"Sable laser doble usado por Darth Moul en el universo de Star Wars",
+    "thumbnail": "https://geekalia.com/wp-content/uploads/2012/02/luz-nocturna-sable-laser-darth-maul.jpg",
+    "stock": 60,
+    "code": 999900001111
+  },
+  {
+    "name": "Traje de Anakin Skywalker",
+    "price":300,
+    "description":"Traje de Anakin Skywalker usado en su madurex Jedi, previo a convertirse en Darth Vader",
+    "thumbnail": "https://i.etsystatic.com/11823141/r/il/d50cfd/1792409199/il_fullxfull.1792409199_kavm.jpg",
+    "stock": 500,
+    "code": 101010101010
+  }
 ]

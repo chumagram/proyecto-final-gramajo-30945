@@ -24,5 +24,5 @@ function mostrarErrSession(e){
 }
 
 function toCreateUser(e){
-    window.location.replace('http://' + window.location.host + '/register');
+    window.location.replace('http://' + window.location.host + '/registrarse');
 }

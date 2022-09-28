@@ -1,52 +1,47 @@
 [
-    {
-        "id": "ahsokatano@gmail.com",
-        "password": "qwe123",
-        "name": "Ahsoka",
-        "lastname": "Tano",
-        "age": "30",
-        "phone": "543886851160",
-        "address": "Calle 33 - num 45 - dpto 10 - Corusant",
-        "alias": "Ahsokita123"
-    },
-    {
-        "id": "dindjarin@gmail.com",
-        "password": "qwe123",
-        "name": "Din",
-        "lastname": "Djarin",
-        "age": "30",
-        "phone": "543886851161",
-        "address": "Calle 34 - num 46 - dpto 11 - Corusant",
-        "alias": "Dincito123"
-    },
-    {
-        "id": "lukeskywalker@gmail.com",
-        "password": "qwe123",
-        "name": "Luke",
-        "lastname": "Skywalker",
-        "age": "30",
-        "phone": "543886851162",
-        "address": "Calle 31 - num 25 - dpto 145 - Corusant",
-        "alias": "Lukecito123"
-    },
-    {
-        "id": "obionekenobi@gmail.com",
-        "password": "qwe123",
-        "name": "Obi-One",
-        "lastname": "Kenobi",
-        "age": "30",
-        "phone": "543886851163",
-        "address": "Calle 12 - num 4456 - dpto 1121 - Corusant",
-        "alias": "ObiOnecito123"
-    },
-    {
-        "id": "padmeamidala@gmail.com",
-        "password": "qwe123",
-        "name": "Padme",
-        "lastname": "Amidala",
-        "age": "30",
-        "phone": "543886851164",
-        "address": "Calle 1 - num 2 - dpto 3 - Nabu",
-        "alias": "Padmecita123"
-    }
+  {
+    "email": "ahsokatano@gmail.com",
+    "password": "qwe123",
+    "name": "Ahsoka",
+    "lastname": "Tano",
+    "age": "30",
+    "address": "Calle 33 - num 45 - dpto 10 - Corusant",
+    "alias": "Ahsokita123"
+  },
+  {
+    "email": "dindjarin@gmail.com",
+    "password": "qwe123",
+    "name": "Din",
+    "lastname": "Djarin",
+    "age": "30",
+    "address": "Calle 34 - num 46 - dpto 11 - Corusant",
+    "alias": "Dincito123"
+  },
+  {
+    "email": "lukeskywalker@gmail.com",
+    "password": "qwe123",
+    "name": "Luke",
+    "lastname": "Skywalker",
+    "age": "30",
+    "address": "Calle 31 - num 25 - dpto 145 - Corusant",
+    "alias": "Lukecito123"
+  },
+  {
+    "email": "obionekenobi@gmail.com",
+    "password": "qwe123",
+    "name": "Obi-One",
+    "lastname": "Kenobi",
+    "age": "30",
+    "address": "Calle 12 - num 4456 - dpto 1121 - Corusant",
+    "alias": "ObiOnecito123"
+  },
+  {
+    "email": "padmeamidala@gmail.com",
+    "password": "qwe123",
+    "name": "Padme",
+    "lastname": "Amidala",
+    "age": "30",
+    "address": "Calle 1 - num 2 - dpto 3 - Nabu",
+    "alias": "Padmecita123"
+  }
 ]

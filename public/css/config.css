@@ -1,0 +1,88 @@
+html{
+  min-height: 100%;
+  position: relative;
+  background-image:linear-gradient(rgba(20, 0, 0, 0.685),rgb(0, 0, 0)),url(../images/background.webp);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+body{
+  background-image:linear-gradient(rgba(20, 0, 0, 0.685),rgb(0, 0, 0)),url(../images/background.webp);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  color: rgb(255, 255, 255);
+  font-family: Arial;
+  margin: 0;
+}
+
+/*************  FOOTER  ***********/
+footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  align-items: center;
+  line-height: 1.4;
+  font-size: small;
+  text-align: left;
+}
+.footer-conteiner{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+#footerParrafo {
+  color: darkgoldenrod;
+  width: 90%;
+}
+hr {
+  background-color: rgb(255, 255, 255);
+  width: 99,9%;
+  height: 1px;
+  border: 0px;
+}
+
+/************* IMAGEN DEL TITULO ***********/
+#tittleImg{
+  display: block;
+  padding: 30px;
+  margin: 0px auto;
+  width: 20%;
+}
+
+/********* LISTA DE CONFIGURACIOENS  *********/
+
+h3 {
+  font-size: 25px;
+  font-family: sans-serif;
+  text-align: center;
+  margin: 20px 0;
+  color: coral;
+}
+
+main{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.config-container{
+  width: 450px;
+  font-size: 16px;
+  background-color: rgba(0, 0, 0, 0.655);
+  padding: 14px 32px 14px 16px;
+  border-radius: 10px;
+  border: 1px solid rgb(122, 94, 0);
+  outline: none;
+  color: white;
+}
+
+.listConfig{
+  padding: 0px 0px 0px 20px;
+}
+
+strong {
+  color: darkgoldenrod;
+}

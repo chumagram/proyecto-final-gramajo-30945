@@ -1,0 +1,107 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  color: antiquewhite;
+  font-family: sans-serif;
+  min-height: 100%;
+  background-image:linear-gradient(rgba(20, 0, 0, 0.685),rgb(0, 0, 0)),url(../images/background.webp);
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+}
+
+h3 {
+  font-size: 25px;
+  font-family: sans-serif;
+  text-align: center;
+  margin: 20px 0;
+}
+
+#contenedor-chat {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+header {
+  width: 100%;
+  margin: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#tittleImg {
+  height: 110px;
+}
+
+.chat-principal{
+  width: 400px;
+  min-height: 400px;
+  background-color: #000000a5;
+  padding: 25px;
+  margin: 10px;
+  border-radius: 20px;
+  border: 1px solid white;
+}
+
+
+/* Estructura general del formulario */
+
+.formulario-contenedor {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+#message {
+  width: 260px;
+  font-size: 16px;
+  background-color: rgb(0, 0, 0);
+  padding: 14px 32px 14px 16px;
+  border-radius: 4px 0 0 4px;
+  border: 1px solid rgb(122, 94, 0);
+  outline: none;
+  color: white;
+}
+
+#boton {
+  padding: 15px;
+  font-size: 16px;
+  font-family: Roboto, sans-serif;
+  border: none;
+  border-radius: 0 4px 4px 0;
+  cursor: pointer;
+  outline: none;
+  background-color: rgb(122, 94, 0);
+  color: white;
+  text-transform: capitalize;
+}
+
+#boton:hover {
+  background-color: #ebb000;
+}
+
+.cadaMensaje {
+  align-items: center;
+  background-color: #000000;
+  margin: 6px 0;
+  padding: 10px 10px 5px 10px;
+  border-radius: 4px;
+  border: 1px solid #562f00;
+}
+
+.time{
+  font-size: 12px;
+  color: #562f00;
+  text-align: right;
+}
+
+.author{
+  color: rgb(122, 94, 0);
+}

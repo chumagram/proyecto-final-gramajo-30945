@@ -1,0 +1,16 @@
+[2022-09-20T10:25:44.908] [WARN] warningsCategory - EndPonit: /css/styleIndex.css Method:GET
+[2022-09-20T10:25:45.001] [WARN] warningsCategory - EndPonit: /scripts/index.js Method:GET
+[2022-09-20T10:25:45.007] [WARN] warningsCategory - EndPonit: /images/tittle.webp Method:GET
+[2022-09-20T15:53:27.824] [WARN] warningsCategory - EndPonit: /socket.io/socket.io.js Method:GET
+[2022-09-21T12:47:13.288] [WARN] warningsCategory - EndPonit: / Method:GET
+[2022-09-21T12:47:13.491] [WARN] warningsCategory - EndPonit: /favicon.ico Method:GET
+[2022-09-26T11:59:30.064] [WARN] warningsCategory - EndPonit: / Method:GET
+[2022-09-26T11:59:30.245] [WARN] warningsCategory - EndPonit: /favicon.ico Method:GET
+[2022-09-26T12:11:40.105] [WARN] warningsCategory - EndPonit: /register Method:GET
+[2022-09-26T14:01:05.935] [WARN] warningsCategory - EndPonit: /register Method:GET
+[2022-09-26T14:03:37.155] [WARN] warningsCategory - EndPonit: /register Method:GET
+[2022-09-26T14:43:34.173] [WARN] warningsCategory - EndPonit: /register Method:GET
+[2022-09-26T15:06:16.699] [WARN] warningsCategory - EndPonit: /register/addAvatar Method:GET
+[2022-09-26T15:24:34.626] [WARN] warningsCategory - EndPonit: /home Method:GET
+[2022-09-27T20:37:34.322] [WARN] warningsCategory - EndPonit: /asd Method:GET
+[2022-09-27T20:37:44.024] [WARN] warningsCategory - EndPonit: /HNAP1/ Method:GET

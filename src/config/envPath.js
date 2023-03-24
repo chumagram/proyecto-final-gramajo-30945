@@ -1,4 +1,4 @@
-const malditoDotenv = require('../../maldito-dotenv')
+const malditoDotenv = require('../../conf-dotenv')
 
 module.exports = {
     NODE_ENV: malditoDotenv.NODE_ENV,
